@@ -1,0 +1,28 @@
+module github.com/fengde/gocommon
+
+go 1.15
+
+replace github.com/go-resty/resty v1.12.0 => gopkg.in/resty.v1 v1.12.0
+
+require (
+	github.com/go-redis/redis/v8 v8.11.4
+	github.com/go-resty/resty/v2 v2.6.0
+	github.com/go-sql-driver/mysql v1.6.0
+	github.com/go-xorm/xorm v0.7.9
+	github.com/joho/godotenv v1.4.0
+	github.com/jonboulle/clockwork v0.2.2 // indirect
+	github.com/kr/pretty v0.3.0 // indirect
+	github.com/lestrrat-go/file-rotatelogs v2.4.0+incompatible
+	github.com/lestrrat-go/strftime v1.0.5 // indirect
+	github.com/mohae/deepcopy v0.0.0-20170929034955-c48cc78d4826
+	github.com/pkg/errors v0.9.1
+	github.com/sirupsen/logrus v1.8.1
+	github.com/spaolacci/murmur3 v1.1.0
+	github.com/tal-tech/go-zero v1.2.3
+	github.com/tidwall/gjson v1.10.0
+	golang.org/x/net v0.0.0-20211020060615-d418f374d309 // indirect
+	gopkg.in/alexcesaro/quotedprintable.v3 v3.0.0-20150716171945-2caba252f4dc // indirect
+	gopkg.in/gomail.v2 v2.0.0-20160411212932-81ebce5c23df
+	gopkg.in/yaml.v2 v2.4.0
+	xorm.io/core v0.7.2-0.20190928055935-90aeac8d08eb
+)
