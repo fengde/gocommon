@@ -67,3 +67,7 @@ func ErrorWithCtx(ctx context.Context, args ...interface{}) {
 func ErrorfWithCtx(ctx context.Context, format string, args ...interface{}) {
 	getCtxLogger(ctx).Errorf(format, args...)
 }
+
+func ErrorStackWithCtx(ctx context.Context, err error) {
+	getCtxLogger(ctx).Errorf("%+v", err)
+}

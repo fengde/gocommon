@@ -78,3 +78,7 @@ func Error(args ...interface{}) {
 func Errorf(format string, args ...interface{}) {
 	logger.Errorf(format, args...)
 }
+
+func ErrorStack(err error) {
+	logger.Errorf("%+v", err)
+}
