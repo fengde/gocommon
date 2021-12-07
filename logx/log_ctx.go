@@ -17,7 +17,7 @@ func NewCtx(logID ...string) context.Context {
 	if len(logID) > 0 && logID[0] != "" {
 		return context.WithValue(context.Background(), LOGID_Filed, logID[0])
 	}
-	return context.WithValue(context.Background(), "logid", fmt.Sprintf("%v%v", time.Now().UnixNano(), verificationCodex.NewNumberCode(5)))
+	return context.WithValue(context.Background(), LOGID_Filed, fmt.Sprintf("%v%v", time.Now().UnixNano(), verificationCodex.NewNumberCode(5)))
 }
 
 // GetLogID 获取logid
@@ -31,9 +31,9 @@ func GetLogID(ctx context.Context) string {
 
 func getCtxLogger(ctx context.Context) *logrus.Entry {
 	if ctx == nil {
-		return logger.WithField("logid", "ctx is nil")
+		return logger.WithField(LOGID_Filed, "ctx is nil")
 	}
-	return logger.WithField("logid", GetLogID(ctx))
+	return logger.WithField(LOGID_Filed, GetLogID(ctx))
 }
 
 func DebugWithCtx(ctx context.Context, args ...interface{}) {
