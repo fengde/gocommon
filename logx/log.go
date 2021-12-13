@@ -1,6 +1,7 @@
 package logx
 
 import (
+	"io"
 	"os"
 	"path/filepath"
 	"time"
@@ -29,7 +30,7 @@ func SetLogFile(logpath string, logSaveDays int) {
 		rotatelogs.WithRotationCount(uint(logSaveDays)),
 	)
 
-	logger.SetOutput(writer)
+	logger.SetOutput(io.MultiWriter(writer, os.Stdout))
 }
 
 // SetFormatter 设置日志输出格式
