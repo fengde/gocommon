@@ -17,8 +17,14 @@ func newResponse(resp *resty.Response) *Response {
 }
 
 // Get 通用的http/get请求封装
-func Get(url string, headers map[string]string, params map[string]string) (*Response, error) {
-	r := resty.New().SetTimeout(time.Minute).R()
+func Get(url string, headers map[string]string, params map[string]string, timeout... time.Duration) (*Response, error) {
+	var r *resty.Request
+	if len(timeout) > 0 {
+		r = resty.New().SetTimeout(timeout[0]).R()
+	} else {
+		r = resty.New().R()
+	}
+
 
 	if len(headers) > 0 {
 		r.SetHeaders(headers)
@@ -37,8 +43,14 @@ func Get(url string, headers map[string]string, params map[string]string) (*Resp
 
 // PostJSON 通用的http/post application/json 请求封装;
 // body参数支持传：string，[]byte，struct，map
-func PostJSON(url string, headers map[string]string, body interface{}) (*Response, error) {
-	r := resty.New().SetTimeout(time.Minute).R().SetHeader("Content-Type", "application/json")
+func PostJSON(url string, headers map[string]string, body interface{}, timeout... time.Duration) (*Response, error) {
+	var r *resty.Request
+	if len(timeout) > 0 {
+		r = resty.New().SetTimeout(timeout[0]).R().SetHeader("Content-Type", "application/json")
+	} else {
+		r = resty.New().R().SetHeader("Content-Type", "application/json")
+	}
+
 
 	if len(headers) > 0 {
 		r.SetHeaders(headers)
