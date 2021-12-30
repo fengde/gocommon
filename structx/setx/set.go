@@ -36,3 +36,36 @@ func (p *Set) Items() []interface{} {
 	})
 	return items
 }
+
+// LeftDifference 想象A，B两个圈，公共区域相交在一起，此函数返回A圈特有的部分
+func (p *Set) LeftDifference(b Set) []interface{} {
+	var left []interface{}
+	for _, v := range p.Items() {
+		if !b.Has(v) {
+			left = append(left, v)
+		}
+	}
+	return left
+}
+
+// RightDifference 想象A，B两个圈，公共区域相交在一起，此函数返回B圈特有的部分
+func (p *Set) RightDifference(b Set) []interface{} {
+	var right []interface{}
+	for _, v := range b.Items() {
+		if !p.Has(v) {
+			right = append(right, v)
+		}
+	}
+	return right
+}
+
+// InnerHave 想象A，B两个圈，公共区域相交在一起，此函数返回A、B共有的部分
+func (p *Set) InnerHave(b Set) []interface{} {
+	var inner []interface{}
+	for _, v := range p.Items() {
+		if b.Has(v) {
+			inner = append(inner, v)
+		}
+	}
+	return inner
+}
