@@ -62,6 +62,10 @@ func (p *Session) Update(table string, set, where map[string]interface{}) (int64
 		args = append(args, v)
 	}
 	for k, v := range where {
+		if fmt.Sprintf("%v=%v", k, v) == "1=1" {
+			wheres = append(wheres, "1=1")
+			continue
+		}
 		wheres = append(wheres, columnStandard(k)+`=?`)
 		args = append(args, v)
 	}
@@ -85,6 +89,10 @@ func (p *Session) Delete(table string, where map[string]interface{}) (int64, err
 	var wheres []string
 	var args []interface{}
 	for k, v := range where {
+		if fmt.Sprintf("%v=%v", k, v) == "1=1" {
+			wheres = append(wheres, "1=1")
+			continue
+		}
 		wheres = append(wheres, columnStandard(k)+`=?`)
 		args = append(args, v)
 	}
