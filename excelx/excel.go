@@ -3,7 +3,6 @@ package excelx
 import (
 	"fmt"
 	"github.com/360EntSecGroup-Skylar/excelize"
-	"github.com/fengde/gocommon/logx"
 	"strconv"
 )
 
@@ -64,7 +63,6 @@ func CreateExcelWithMergeCell(filepath string, titles []string, rows [][]interfa
 
 
 			if tryMerge && vcellRowID > hcellRowID {
-				logx.Info(fmt.Sprintf("%v%v", axisPrefix, hcellRowID), " ", fmt.Sprintf("%v%v", axisPrefix, vcellRowID))
 				f.MergeCell(Sheet1, fmt.Sprintf("%v%v", axisPrefix, hcellRowID), fmt.Sprintf("%v%v", axisPrefix, vcellRowID))
 				hcellRowID = hcellRowID
 			}
