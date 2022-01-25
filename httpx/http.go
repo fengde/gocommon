@@ -66,3 +66,29 @@ func PostJSON(url string, headers map[string]string, body interface{}, timeout..
 
 	return newResponse(resp), nil
 }
+
+// PutJSON 通用的Put方法 application/json 请求封装;
+// body参数支持传：string，[]byte，struct，map
+func PutJSON(url string, headers map[string]string, body interface{}, timeout... time.Duration) (*Response, error) {
+	var r *resty.Request
+	if len(timeout) > 0 {
+		r = resty.New().SetTimeout(timeout[0]).R().SetHeader("Content-Type", "application/json")
+	} else {
+		r = resty.New().R().SetHeader("Content-Type", "application/json")
+	}
+
+
+	if len(headers) > 0 {
+		r.SetHeaders(headers)
+	}
+	if body != nil {
+		r.SetBody(body)
+	}
+
+	resp, err := r.EnableTrace().Put(url)
+	if err != nil {
+		return nil, errorx.WithStack(err)
+	}
+
+	return newResponse(resp), nil
+}
