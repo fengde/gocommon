@@ -1,11 +1,13 @@
 package logx
 
 import (
+	"github.com/fengde/gocommon/errorx"
 	"io"
 	"os"
 	"path/filepath"
 	"time"
 
+	"github.com/evalphobia/logrus_sentry"
 	rotatelogs "github.com/lestrrat-go/file-rotatelogs"
 	log "github.com/sirupsen/logrus"
 )
@@ -46,6 +48,22 @@ func SetLevel(level Level) {
 // AddHook 添加hook
 func AddHook(hook Hook) {
 	logger.AddHook(hook)
+}
+
+// AddSentryHook 添加sentry hook。指定levels类型日志推送到sentry
+func AddSentryHook(dsn string, levels []Level) error {
+	var tmp []log.Level
+	for _, level := range levels {
+		tmp = append(tmp, Level2LogrusLevel(level))
+	}
+	hook, err := logrus_sentry.NewSentryHook(dsn, tmp)
+	if err != nil {
+		return errorx.WithStack(err)
+	}
+
+	AddHook(hook)
+
+	return nil
 }
 
 func Debug(args ...interface{}) {

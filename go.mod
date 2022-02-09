@@ -6,6 +6,9 @@ replace github.com/go-resty/resty v1.12.0 => gopkg.in/resty.v1 v1.12.0
 
 require (
 	github.com/360EntSecGroup-Skylar/excelize v1.4.1
+	github.com/certifi/gocertifi v0.0.0-20210507211836-431795d63e8d // indirect
+	github.com/evalphobia/logrus_sentry v0.8.2
+	github.com/getsentry/raven-go v0.2.0 // indirect
 	github.com/go-redis/redis/v8 v8.11.4
 	github.com/go-resty/resty/v2 v2.6.0
 	github.com/go-sql-driver/mysql v1.6.0
@@ -21,6 +24,7 @@ require (
 	github.com/spaolacci/murmur3 v1.1.0
 	github.com/tal-tech/go-zero v1.2.3
 	github.com/tidwall/gjson v1.10.0
+	golang.org/x/crypto v0.0.0-20210921155107-089bfa567519 // indirect
 	golang.org/x/net v0.0.0-20211020060615-d418f374d309 // indirect
 	gopkg.in/alexcesaro/quotedprintable.v3 v3.0.0-20150716171945-2caba252f4dc // indirect
 	gopkg.in/gomail.v2 v2.0.0-20160411212932-81ebce5c23df

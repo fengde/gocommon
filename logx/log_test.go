@@ -10,6 +10,15 @@ func TestDebug(t *testing.T) {
 }
 
 func TestSetLogFile(t *testing.T) {
-	SetLogFile("./fengde.log", 2)
+	SetLogFile("./test.log", 2)
 	DebugWithCtx(nil, "hello world")
+}
+
+func TestSentryHook(t *testing.T) {
+	AddSentryHook("your dsn", []Level{
+		ErrorLevel,
+	})
+
+	Error("test sentry")
+	ErrorfWithCtx(NewCtx(), "test sentry2")
 }
