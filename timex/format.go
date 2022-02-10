@@ -5,6 +5,7 @@ import (
 )
 
 var layout = "2006-01-02 15:04:05"
+var dateLayout = "2006-01-02"
 
 
 // ParseTime 请使用String2Time
@@ -49,4 +50,15 @@ func Time2String(t time.Time) string {
 // Time2Unix Time对象转时间戳
 func Time2Unix(t time.Time) int64 {
 	return t.Unix()
+}
+
+
+// NowTimeString 返回当前字符串时间格式，如 2022-02-10 00:00:00
+func NowTimeString() string {
+	return time.Now().Format(layout)
+}
+
+// NowDateString 返回当前字符串日期格式，如 2022-02-10
+func NowDateString() string {
+	return time.Now().Format(dateLayout)
 }

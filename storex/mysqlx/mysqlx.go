@@ -26,7 +26,7 @@ type Cluster struct {
 }
 
 // NewCluster 创建集群对象，同样适用单个DB实例情况
-func NewCluster(dataSourceNames []string, connMaxLifetime time.Duration, maxOpenConns, maxIdleConns int) (*Cluster, error) {
+func NewCluster(dataSourceNames []string, connMaxLifetime time.Duration, maxOpenConns, maxIdleConns int, closeShowSQL ...bool) (*Cluster, error) {
 	eg, err := xorm.NewEngineGroup("mysql", dataSourceNames, xorm.LeastConnPolicy())
 	if err != nil {
 		return nil, errorx.WithStack(err)
@@ -36,8 +36,11 @@ func NewCluster(dataSourceNames []string, connMaxLifetime time.Duration, maxOpen
 	eg.SetMaxOpenConns(maxOpenConns)
 	eg.SetMaxIdleConns(maxIdleConns)
 
-	eg.ShowSQL(true)
-	eg.ShowExecTime(true)
+	if !(len(closeShowSQL) > 0 && closeShowSQL[0])  {
+		eg.ShowSQL(true)
+		eg.ShowExecTime(true)
+	}
+
 	eg.SetLogLevel(core.LOG_INFO)
 
 	if err := eg.Ping(); err != nil {
