@@ -109,7 +109,16 @@ func (p *Cluster) Update(table string, set, where map[string]interface{}) (int64
 	defer session.Close()
 
 	return session.Update(table, set, where)
+}
 
+// UpdateByID 根据id进行更新，返回更新的记录数
+func (p *Cluster) UpdateByID(table string, set map[string]interface{}, id int64) (int64, error) {
+	session := p.session()
+	defer session.Close()
+
+	return session.Update(table, set, map[string]interface{}{
+		"id": id,
+	})
 }
 
 // Delete 删除，返回删除的记录数
@@ -119,6 +128,17 @@ func (p *Cluster) Delete(table string, where map[string]interface{}) (int64, err
 
 	return session.Delete(table, where)
 }
+
+// DeleteByID 根据id进行删除
+func (p *Cluster) DeleteByID(table string, id int64) (int64, error) {
+	session := p.session()
+	defer session.Close()
+
+	return session.Delete(table, map[string]interface{}{
+		"id": id,
+	})
+}
+
 
 // Exec 执行复杂SQL
 func (p *Cluster) Exec(query string, args ...interface{}) (sql.Result, error) {

@@ -78,7 +78,13 @@ func (p *Session) Update(table string, set, where map[string]interface{}) (int64
 	}
 
 	return result.RowsAffected()
+}
 
+// UpdateByID 根据id更新
+func (p *Session) UpdateByID(table string, set map[string]interface{}, id int64) (int64, error) {
+	return p.Update(table, set, map[string]interface{}{
+		"id": id,
+	})
 }
 
 // Delete 删除，返回删除的记录数
@@ -105,6 +111,13 @@ func (p *Session) Delete(table string, where map[string]interface{}) (int64, err
 	}
 
 	return result.RowsAffected()
+}
+
+// DeleteByID 根据id删除
+func (p *Session) DeleteByID(table string, id int64) (int64, error) {
+	return p.Delete(table, map[string]interface{}{
+		"id": id,
+	})
 }
 
 // Exec 执行复杂SQL
