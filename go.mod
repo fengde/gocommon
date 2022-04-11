@@ -1,6 +1,6 @@
 module github.com/fengde/gocommon
 
-go 1.15
+go 1.16
 
 replace github.com/go-resty/resty v1.12.0 => gopkg.in/resty.v1 v1.12.0
 
@@ -10,6 +10,7 @@ require (
 	github.com/coocood/freecache v1.2.1
 	github.com/evalphobia/logrus_sentry v0.8.2
 	github.com/getsentry/raven-go v0.2.0 // indirect
+	github.com/go-mysql-org/go-mysql v1.4.0 // indirect
 	github.com/go-redis/redis/v8 v8.11.4
 	github.com/go-resty/resty/v2 v2.6.0
 	github.com/go-sql-driver/mysql v1.6.0
