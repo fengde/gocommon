@@ -26,7 +26,8 @@ func NewLocker(client *Client, sourceID string, autoUnlockSecond int64) *Locker 
 	}
 }
 
-// Lock 上锁，非阻塞，如果上锁成功，bool=true
+// Lock 非阻塞上锁
+// 返回值：锁成功 返回true, nil; 锁失败 返回false
 func (p *Locker) Lock() (bool, error) {
 	err := p.client.client.Do(p.client.getCtx(), "SET", p.key, p.value, "EX", p.autoUnlockSecond, "NX").Err()
 	if err == redis.Nil {
@@ -36,6 +37,23 @@ func (p *Locker) Lock() (bool, error) {
 		return false, errorx.WithStack(err)
 	}
 	return true, nil
+}
+
+// LockBlock 阻塞上锁
+// 返回值：锁成功 返回true, nil; 锁失败 返回false
+func (p *Locker) LockBlock() (bool, error) {
+	for {
+		ok, err := p.Lock()
+		if err != nil {
+			return false, errorx.WithStack(err)
+		}
+
+		if ok {
+			return true, nil
+		}
+
+		time.Sleep(time.Second)
+	}
 }
 
 // Unlock 释放锁
