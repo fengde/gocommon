@@ -68,12 +68,12 @@ func NowUnix() int64 {
 
 // NowUnixMilli 返回当前的unix 毫秒
 func NowUnixMilli() int64 {
-	return time.Now().UnixMilli()
+	return NowUnixNano() / 1000000
 }
 
 // NowUnixMicro 返回当前的unix 微秒
 func NowUnixMicro() int64 {
-	return time.Now().UnixMicro()
+	return NowUnixNano() / 1000
 }
 
 // NowUnixNano 返回当前的unix 纳秒
