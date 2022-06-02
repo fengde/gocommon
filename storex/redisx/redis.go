@@ -126,7 +126,7 @@ func (p *Client) Exist(key string) (bool, error) {
 	return cmd.Val() == 1, cmd.Err()
 }
 
-func (p *Client) Do(args ...interface{}) *redis.Cmd{
+func (p *Client) Do(args ...interface{}) *redis.Cmd {
 	return p.client.Do(p.getCtx(), args...)
 }
 
@@ -138,4 +138,9 @@ func (p *Client) NewLocker(sourceID string, autoUnlockSecond int64) *Locker {
 // NewList 创建分布式队列
 func (p *Client) NewList(listName string) *List {
 	return NewList(p, listName)
+}
+
+// IsRedisNil 判断err是否为redis nil
+func IsRedisNil(err error) bool {
+	return err == redis.Nil
 }
