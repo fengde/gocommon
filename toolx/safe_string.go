@@ -1,4 +1,4 @@
-package stringx
+package toolx
 
 // SafeString 安全的返回字符串，如果str长度超过safeLength，返回str[0:safeLength]
 func SafeString(str string, safeLength ...int) string {

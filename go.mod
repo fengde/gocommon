@@ -6,6 +6,7 @@ replace github.com/go-resty/resty v1.12.0 => gopkg.in/resty.v1 v1.12.0
 
 require (
 	github.com/360EntSecGroup-Skylar/excelize v1.4.1
+	github.com/beanstalkd/go-beanstalk v0.1.0 // indirect
 	github.com/certifi/gocertifi v0.0.0-20210507211836-431795d63e8d // indirect
 	github.com/coocood/freecache v1.2.1
 	github.com/evalphobia/logrus_sentry v0.8.2

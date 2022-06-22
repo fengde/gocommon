@@ -7,7 +7,7 @@ import (
 
 	"github.com/sirupsen/logrus"
 
-	"github.com/fengde/gocommon/verificationCodex"
+	"github.com/fengde/gocommon/toolx"
 )
 
 var LOGID_Filed = "logid"
@@ -17,7 +17,7 @@ func NewCtx(logID ...string) context.Context {
 	if len(logID) > 0 && logID[0] != "" {
 		return context.WithValue(context.Background(), LOGID_Filed, logID[0])
 	}
-	return context.WithValue(context.Background(), LOGID_Filed, fmt.Sprintf("%v%v", time.Now().UnixNano(), verificationCodex.NewNumberCode(5)))
+	return context.WithValue(context.Background(), LOGID_Filed, fmt.Sprintf("%v%v", time.Now().UnixNano(), toolx.NewNumberCode(5)))
 }
 
 // GetLogID 获取logid

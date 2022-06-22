@@ -5,7 +5,7 @@ import (
 	"time"
 
 	"github.com/fengde/gocommon/errorx"
-	"github.com/fengde/gocommon/verificationCodex"
+	"github.com/fengde/gocommon/toolx"
 	"github.com/go-redis/redis/v8"
 )
 
@@ -21,7 +21,7 @@ func NewLocker(client *Client, sourceID string, autoUnlockSecond int64) *Locker 
 	return &Locker{
 		client:           client,
 		key:              "redisx-locker:" + sourceID,
-		value:            fmt.Sprintf("%v.%v", time.Now().UnixNano(), verificationCodex.NewNumberCode(4)),
+		value:            fmt.Sprintf("%v.%v", time.Now().UnixNano(), toolx.NewNumberCode(4)),
 		autoUnlockSecond: autoUnlockSecond,
 	}
 }

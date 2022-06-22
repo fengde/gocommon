@@ -7,6 +7,9 @@ import (
 func TestDebug(t *testing.T) {
 	ctx := NewCtx()
 	DebugWithCtx(ctx, "hello world")
+
+	Debug("abc")
+	Debug("a", "b", "c")
 }
 
 func TestSetLogFile(t *testing.T) {

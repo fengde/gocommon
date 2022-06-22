@@ -1,4 +1,4 @@
-package copyx
+package toolx
 
 import "github.com/mohae/deepcopy"
 

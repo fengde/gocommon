@@ -1,4 +1,4 @@
-package stringsx
+package toolx
 
 import (
 	"testing"

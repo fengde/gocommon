@@ -1,11 +1,14 @@
 package logx
 
 import (
-	"github.com/fengde/gocommon/errorx"
+	"fmt"
 	"io"
 	"os"
 	"path/filepath"
+	"strings"
 	"time"
+
+	"github.com/fengde/gocommon/errorx"
 
 	"github.com/evalphobia/logrus_sentry"
 	rotatelogs "github.com/lestrrat-go/file-rotatelogs"
@@ -23,6 +26,9 @@ func init() {
 }
 
 // SetLogFile 设置输出到文件
+// 参数：
+//	logpath 日志文件路径
+//  logSaveDays 日志保留天数
 func SetLogFile(logpath string, logSaveDays int) {
 	os.MkdirAll(filepath.Dir(logpath), os.ModePerm)
 	writer, _ := rotatelogs.New(
@@ -67,7 +73,7 @@ func AddSentryHook(dsn string, levels []Level) error {
 }
 
 func Debug(args ...interface{}) {
-	logger.Debug(args...)
+	logger.Debug(format(args...))
 }
 
 func Debugf(format string, args ...interface{}) {
@@ -75,7 +81,7 @@ func Debugf(format string, args ...interface{}) {
 }
 
 func Info(args ...interface{}) {
-	logger.Info(args...)
+	logger.Info(format(args...))
 }
 
 func Infof(format string, args ...interface{}) {
@@ -83,7 +89,7 @@ func Infof(format string, args ...interface{}) {
 }
 
 func Warn(args ...interface{}) {
-	logger.Warn(args...)
+	logger.Warn(format(args...))
 }
 
 func Warnf(format string, args ...interface{}) {
@@ -91,7 +97,7 @@ func Warnf(format string, args ...interface{}) {
 }
 
 func Error(args ...interface{}) {
-	logger.Error(args...)
+	logger.Error(format(args...))
 }
 
 func Errorf(format string, args ...interface{}) {
@@ -100,4 +106,14 @@ func Errorf(format string, args ...interface{}) {
 
 func ErrorStack(err error) {
 	logger.Errorf("%+v", err)
+}
+
+func format(args ...interface{}) string {
+	var replace []string
+
+	for i := 0; i < len(args); i++ {
+		replace = append(replace, "%v")
+	}
+
+	return fmt.Sprintf(strings.Join(replace, " "), args...)
 }

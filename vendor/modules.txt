@@ -3,6 +3,9 @@
 github.com/360EntSecGroup-Skylar/excelize
 # github.com/BurntSushi/toml v0.3.1
 github.com/BurntSushi/toml
+# github.com/beanstalkd/go-beanstalk v0.1.0
+## explicit
+github.com/beanstalkd/go-beanstalk
 # github.com/certifi/gocertifi v0.0.0-20210507211836-431795d63e8d
 ## explicit
 github.com/certifi/gocertifi
