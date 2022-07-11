@@ -10,7 +10,7 @@ type Context struct {
 	*gin.Context
 }
 
-func Handler(c *gin.Context, f func(c *Context)) gin.HandlerFunc {
+func Handler(f func(c *Context)) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		f(&Context{
 			Context: c,
