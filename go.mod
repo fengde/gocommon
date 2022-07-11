@@ -6,19 +6,19 @@ replace github.com/go-resty/resty v1.12.0 => gopkg.in/resty.v1 v1.12.0
 
 require (
 	github.com/360EntSecGroup-Skylar/excelize v1.4.1
-	github.com/beanstalkd/go-beanstalk v0.1.0 // indirect
+	github.com/beanstalkd/go-beanstalk v0.1.0
 	github.com/certifi/gocertifi v0.0.0-20210507211836-431795d63e8d // indirect
 	github.com/coocood/freecache v1.2.1
 	github.com/evalphobia/logrus_sentry v0.8.2
 	github.com/getsentry/raven-go v0.2.0 // indirect
-	github.com/go-mysql-org/go-mysql v1.4.0 // indirect
+	github.com/gin-gonic/gin v1.8.1
+	github.com/go-mysql-org/go-mysql v1.4.0
 	github.com/go-redis/redis/v8 v8.11.4
 	github.com/go-resty/resty/v2 v2.6.0
 	github.com/go-sql-driver/mysql v1.6.0
 	github.com/go-xorm/xorm v0.7.9
 	github.com/joho/godotenv v1.4.0
 	github.com/jonboulle/clockwork v0.2.2 // indirect
-	github.com/kr/pretty v0.3.0 // indirect
 	github.com/lestrrat-go/file-rotatelogs v2.4.0+incompatible
 	github.com/lestrrat-go/strftime v1.0.5 // indirect
 	github.com/mohae/deepcopy v0.0.0-20170929034955-c48cc78d4826
