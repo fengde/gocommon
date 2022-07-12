@@ -13,15 +13,15 @@ import (
 )
 
 type Context struct {
-	requestId string
 	*gin.Context
+	requestId string
 }
 
 func Handler(f func(c *Context)) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		f(&Context{
 			Context:   c,
-			requestId: fmt.Sprintf("%d%s", timex.NowUnixNano(), toolx.NewNumberCode(4)),
+			requestId: fmt.Sprintf("%v%s", timex.NowUnixNano(), toolx.NewNumberCode(4)),
 		})
 	}
 }
@@ -51,8 +51,8 @@ func (c *Context) Out(status string, message string, data interface{}) {
 	})
 }
 
-// JsonRequest 解析json数据，按照govalidator做数据校验
-func (c *Context) JsonRequest(r interface{}) error {
+// GetJsonData 解析json数据，按照govalidator做数据校验
+func (c *Context) GetJsonData(r interface{}) error {
 	if err := c.ShouldBind(r); err != nil {
 		return err
 	}
