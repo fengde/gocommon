@@ -2,16 +2,18 @@ package toolx
 
 import (
 	"fmt"
-	"math"
 
 	"github.com/fengde/gocommon/mathx"
 )
 
 // NewNumberCode 创建指定长度的数字验证码
 func NewNumberCode(length int) string {
-	min := int64(math.Pow10(length - 1))
-	max := int64(math.Pow10(length))
-	return fmt.Sprintf("%d", mathx.Rand(min, max-1))
+	var s string
+	for i := 0; i < length; i++ {
+		s += fmt.Sprintf("%d", mathx.Rand(0, 9))
+	}
+
+	return s
 }
 
 // NewCharCode 创建指定长度的字符验证码
