@@ -3,6 +3,9 @@
 github.com/360EntSecGroup-Skylar/excelize
 # github.com/BurntSushi/toml v0.3.1
 github.com/BurntSushi/toml
+# github.com/asaskevich/govalidator v0.0.0-20210307081110-f21760c49a8d
+## explicit
+github.com/asaskevich/govalidator
 # github.com/beanstalkd/go-beanstalk v0.1.0
 ## explicit
 github.com/beanstalkd/go-beanstalk
