@@ -6,7 +6,9 @@ import (
 	"net/http"
 
 	"github.com/asaskevich/govalidator"
+	"github.com/fengde/gocommon/jsonx"
 	"github.com/fengde/gocommon/logx"
+	"github.com/fengde/gocommon/safex"
 	"github.com/fengde/gocommon/timex"
 	"github.com/fengde/gocommon/toolx"
 	"github.com/gin-gonic/gin"
@@ -18,12 +20,26 @@ type Context struct {
 	*gin.Context
 }
 
+func GetReqeustId(ginc *gin.Context) string {
+	requestId := ginc.GetString(RequestIdName)
+	if requestId == "" {
+		requestId = fmt.Sprintf("%v%s", timex.NowUnixNano(), toolx.NewNumberCode(4))
+		ginc.Set(RequestIdName, requestId)
+	}
+	return requestId
+}
+
 func Handler(f func(c *Context)) gin.HandlerFunc {
 	return func(ginc *gin.Context) {
-		_, ok := ginc.Get(RequestIdName)
-		if !ok {
-			ginc.Set(RequestIdName, fmt.Sprintf("%v%s", timex.NowUnixNano(), toolx.NewNumberCode(4)))
-		}
+		defer safex.Recover(func() {
+			ginc.JSON(http.StatusOK, gin.H{
+				"status":      "fail",
+				"message":     "内部异常",
+				"data":        map[string]interface{}{},
+				RequestIdName: GetReqeustId(ginc),
+			})
+		})
+
 		f(&Context{
 			Context: ginc,
 		})
@@ -47,12 +63,14 @@ func (c *Context) OutRelogin() {
 
 // Out 通用返回
 func (c *Context) Out(status string, message string, data interface{}) {
-	c.JSON(http.StatusOK, gin.H{
+	ginH := gin.H{
 		"status":      status,
 		"message":     message,
 		"data":        data,
 		RequestIdName: c.RequestId(),
-	})
+	}
+	c.Set("out", jsonx.MarshalToStringNoErr(ginH))
+	c.JSON(http.StatusOK, ginH)
 }
 
 // GetJsonData 解析json数据，按照govalidator做数据校验

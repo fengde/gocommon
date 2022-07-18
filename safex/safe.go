@@ -17,11 +17,10 @@ func Go(fn func()) {
 
 // Recover 封装了语言recover，支持传入扫尾函数
 func Recover(cleanups ...func()) {
-	for _, cleanup := range cleanups {
-		cleanup()
-	}
-
 	if p := recover(); p != nil {
 		logx.Warn(p)
+		for _, cleanup := range cleanups {
+			cleanup()
+		}
 	}
 }
