@@ -12,16 +12,20 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+const RequestIdName = "request_id"
+
 type Context struct {
 	*gin.Context
-	requestId string
 }
 
 func Handler(f func(c *Context)) gin.HandlerFunc {
-	return func(c *gin.Context) {
+	return func(ginc *gin.Context) {
+		_, ok := ginc.Get(RequestIdName)
+		if !ok {
+			ginc.Set(RequestIdName, fmt.Sprintf("%v%s", timex.NowUnixNano(), toolx.NewNumberCode(4)))
+		}
 		f(&Context{
-			Context:   c,
-			requestId: fmt.Sprintf("%v%s", timex.NowUnixNano(), toolx.NewNumberCode(4)),
+			Context: ginc,
 		})
 	}
 }
@@ -44,10 +48,10 @@ func (c *Context) OutRelogin() {
 // Out 通用返回
 func (c *Context) Out(status string, message string, data interface{}) {
 	c.JSON(http.StatusOK, gin.H{
-		"status":     status,
-		"message":    message,
-		"data":       data,
-		"request_id": c.requestId,
+		"status":      status,
+		"message":     message,
+		"data":        data,
+		RequestIdName: c.RequestId(),
 	})
 }
 
@@ -64,10 +68,11 @@ func (c *Context) GetJsonData(r interface{}) error {
 
 // RequestId 返回http请求id
 func (c *Context) RequestId() string {
-	return c.requestId
+	requestId, _ := c.Get(RequestIdName)
+	return fmt.Sprintf("%v", requestId)
 }
 
 // LogCtx 返回日志ctx
 func (c *Context) LogCtx() context.Context {
-	return logx.NewCtx(c.requestId)
+	return logx.NewCtx(c.RequestId())
 }
