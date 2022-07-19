@@ -18,9 +18,9 @@ import (
 var logger = log.New()
 
 func init() {
-	logger.SetFormatter(&log.TextFormatter{
-		TimestampFormat: "2006-01-02 15:04:05",
-	})
+	// logger.SetFormatter(&log.TextFormatter{
+	// 	TimestampFormat: "2006-01-02 15:04:05",
+	// })
 	logger.SetOutput(os.Stdout)
 	logger.SetLevel(log.DebugLevel)
 }
