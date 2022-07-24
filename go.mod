@@ -39,4 +39,7 @@ require (
 	golang.org/x/crypto v0.0.0-20210921155107-089bfa567519 // indirect
 	golang.org/x/net v0.0.0-20211020060615-d418f374d309 // indirect
 	gopkg.in/alexcesaro/quotedprintable.v3 v3.0.0-20150716171945-2caba252f4dc // indirect
+	k8s.io/api v0.20.12
+	k8s.io/apimachinery v0.20.12
+	k8s.io/client-go v0.20.12
 )
