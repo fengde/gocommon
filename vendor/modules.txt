@@ -3,6 +3,8 @@
 github.com/360EntSecGroup-Skylar/excelize
 # github.com/BurntSushi/toml v0.3.1
 github.com/BurntSushi/toml
+# github.com/andres-erbsen/clock v0.0.0-20160526145045-9e14626cd129
+github.com/andres-erbsen/clock
 # github.com/beanstalkd/go-beanstalk v0.1.0
 ## explicit
 github.com/beanstalkd/go-beanstalk
@@ -151,6 +153,9 @@ github.com/tidwall/pretty
 go.uber.org/atomic
 # go.uber.org/multierr v1.6.0
 go.uber.org/multierr
+# go.uber.org/ratelimit v0.2.0
+## explicit
+go.uber.org/ratelimit
 # go.uber.org/zap v1.17.0
 go.uber.org/zap
 go.uber.org/zap/buffer

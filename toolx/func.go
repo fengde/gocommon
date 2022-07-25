@@ -1,6 +1,8 @@
 package toolx
 
-import "time"
+import (
+	"time"
+)
 
 // RepeatFunc 重复执行函数f，n次
 func RepeatFunc(n int, f func()) {
