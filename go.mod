@@ -29,6 +29,8 @@ require (
 )
 
 require (
+	github.com/bits-and-blooms/bitset v1.3.0 // indirect
+	github.com/bits-and-blooms/bloom/v3 v3.2.0
 	github.com/certifi/gocertifi v0.0.0-20210507211836-431795d63e8d // indirect
 	github.com/getsentry/raven-go v0.2.0 // indirect
 	github.com/jonboulle/clockwork v0.2.2 // indirect
