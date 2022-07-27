@@ -1,15 +1,28 @@
+// 漏桶算法
+
 package ratelimitx
 
-import "go.uber.org/ratelimit"
+import (
+	"time"
+
+	"go.uber.org/ratelimit"
+)
 
 type Ratelimit struct {
 	limiter ratelimit.Limiter
 }
 
-// NewRatelimit 创建限速器，指定速率，使用漏桶算法
+// NewRatelimit 创建限速器，指定速率(每秒）
 func NewRatelimit(rps int) *Ratelimit {
 	return &Ratelimit{
 		limiter: ratelimit.New(rps),
+	}
+}
+
+// NewRatelimitCommon 创建通用的限速器，指定per时间内可以处理的次数
+func NewRatelimitCommon(r int, per time.Duration) *Ratelimit {
+	return &Ratelimit{
+		limiter: ratelimit.New(r, ratelimit.Per(per)),
 	}
 }
 
