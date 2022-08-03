@@ -2,7 +2,9 @@ package k8x
 
 import (
 	"context"
+	"strings"
 
+	"github.com/fengde/gocommon/errorx"
 	appsv1 "k8s.io/api/apps/v1"
 	corev1 "k8s.io/api/core/v1"
 	networkingv1 "k8s.io/api/networking/v1"
@@ -10,6 +12,8 @@ import (
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/tools/clientcmd"
 )
+
+var NotExistError = errorx.New("资源不存在")
 
 type Client struct {
 	Clientset *kubernetes.Clientset
@@ -40,7 +44,11 @@ func NewClient(kubeconfig string, namespace string) (*Client, error) {
 
 // GetDeployment 根据名称查询deployment信息
 func (p *Client) GetDeployment(deploymentName string) (*appsv1.Deployment, error) {
-	return p.Clientset.AppsV1().Deployments(p.namespace).Get(context.Background(), deploymentName, metav1.GetOptions{})
+	data, err := p.Clientset.AppsV1().Deployments(p.namespace).Get(context.Background(), deploymentName, metav1.GetOptions{})
+	if err != nil && strings.Contains(err.Error(), "not found") {
+		return nil, NotExistError
+	}
+	return data, err
 }
 
 // QueryDeployment 查询deployment列表
@@ -77,7 +85,11 @@ func (p *Client) DeleteDeployment(deploymentName string) error {
 
 // GetService 获取service信息
 func (p *Client) GetService(serviceName string) (*corev1.Service, error) {
-	return p.Clientset.CoreV1().Services(p.namespace).Get(context.Background(), serviceName, metav1.GetOptions{})
+	data, err := p.Clientset.CoreV1().Services(p.namespace).Get(context.Background(), serviceName, metav1.GetOptions{})
+	if err != nil && strings.Contains(err.Error(), "not found") {
+		return nil, NotExistError
+	}
+	return data, err
 }
 
 // QueryService 查询servic列表
@@ -110,7 +122,11 @@ func (p *Client) DeleteService(serviceName string) error {
 
 // GetIngress 查询ingress信息
 func (p *Client) GetIngress(ingressName string) (*networkingv1.Ingress, error) {
-	return p.Clientset.NetworkingV1().Ingresses(p.namespace).Get(context.Background(), ingressName, metav1.GetOptions{})
+	data, err := p.Clientset.NetworkingV1().Ingresses(p.namespace).Get(context.Background(), ingressName, metav1.GetOptions{})
+	if err != nil && strings.Contains(err.Error(), "not found") {
+		return nil, NotExistError
+	}
+	return data, err
 }
 
 // QueryIngress 查询ingress列表

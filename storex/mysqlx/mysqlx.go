@@ -36,7 +36,7 @@ func NewCluster(dataSourceNames []string, connMaxLifetime time.Duration, maxOpen
 	eg.SetMaxOpenConns(maxOpenConns)
 	eg.SetMaxIdleConns(maxIdleConns)
 
-	if !(len(closeShowSQL) > 0 && closeShowSQL[0])  {
+	if !(len(closeShowSQL) > 0 && closeShowSQL[0]) {
 		eg.ShowSQL(true)
 		eg.ShowExecTime(true)
 	}
@@ -138,7 +138,6 @@ func (p *Cluster) DeleteByID(table string, id int64) (int64, error) {
 		"id": id,
 	})
 }
-
 
 // Exec 执行复杂SQL
 func (p *Cluster) Exec(query string, args ...interface{}) (sql.Result, error) {
