@@ -14,7 +14,7 @@ func TestDebug(t *testing.T) {
 
 func TestSetLogFile(t *testing.T) {
 	SetLogFile("./test.log", 2)
-	DebugWithCtx(nil, "hello world")
+	DebugWithCtx(nil, "hello world", "abc", "eft")
 }
 
 func TestSentryHook(t *testing.T) {
