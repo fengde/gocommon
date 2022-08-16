@@ -1,6 +1,10 @@
 package safex
 
-import "github.com/fengde/gocommon/logx"
+import (
+	"runtime/debug"
+
+	"github.com/fengde/gocommon/logx"
+)
 
 // Func 安全执行，内部已处理异常捕获
 func Func(fn func()) {
@@ -18,7 +22,8 @@ func Go(fn func()) {
 // Recover 封装了语言recover，支持传入扫尾函数
 func Recover(cleanups ...func()) {
 	if p := recover(); p != nil {
-		logx.Warn(p)
+		logx.Error(p)
+		logx.Error(string(debug.Stack()))
 		for _, cleanup := range cleanups {
 			cleanup()
 		}
