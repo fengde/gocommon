@@ -37,6 +37,9 @@ github.com/evalphobia/logrus_sentry
 # github.com/getsentry/raven-go v0.2.0
 ## explicit
 github.com/getsentry/raven-go
+# github.com/go-gomail/gomail v0.0.0-20160411212932-81ebce5c23df
+## explicit
+github.com/go-gomail/gomail
 # github.com/go-logr/logr v0.2.0
 ## explicit; go 1.14
 github.com/go-logr/logr

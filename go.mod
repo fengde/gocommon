@@ -9,6 +9,7 @@ require (
 	github.com/beanstalkd/go-beanstalk v0.1.0
 	github.com/coocood/freecache v1.2.1
 	github.com/evalphobia/logrus_sentry v0.8.2
+	github.com/go-gomail/gomail v0.0.0-20160411212932-81ebce5c23df
 	github.com/go-mysql-org/go-mysql v1.4.0
 	github.com/go-redis/redis/v8 v8.11.4
 	github.com/go-resty/resty/v2 v2.6.0
@@ -23,6 +24,7 @@ require (
 	github.com/tal-tech/go-zero v1.2.3
 	github.com/tidwall/gjson v1.10.0
 	golang.org/x/sync v0.0.0-20210220032951-036812b2e83c
+	golang.org/x/text v0.3.7
 	gopkg.in/gomail.v2 v2.0.0-20160411212932-81ebce5c23df
 	gopkg.in/yaml.v2 v2.4.0
 	xorm.io/core v0.7.2-0.20190928055935-90aeac8d08eb
@@ -59,7 +61,6 @@ require (
 	golang.org/x/oauth2 v0.0.0-20200107190931-bf48bf16ab8d // indirect
 	golang.org/x/sys v0.0.0-20211106132015-ebca88c72f68 // indirect
 	golang.org/x/term v0.0.0-20201126162022-7de9c90e9dd1 // indirect
-	golang.org/x/text v0.3.7 // indirect
 	golang.org/x/time v0.0.0-20210723032227-1f47c861a9ac // indirect
 	google.golang.org/appengine v1.6.5 // indirect
 	google.golang.org/protobuf v1.27.1 // indirect
