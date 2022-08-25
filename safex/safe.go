@@ -24,8 +24,8 @@ func Recover(cleanups ...func()) {
 	if p := recover(); p != nil {
 		logx.Error(p)
 		logx.Error(string(debug.Stack()))
-		for _, cleanup := range cleanups {
-			cleanup()
-		}
+	}
+	for _, cleanup := range cleanups {
+		cleanup()
 	}
 }
