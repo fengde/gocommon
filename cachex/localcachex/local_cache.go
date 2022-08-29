@@ -3,19 +3,19 @@ package localcachex
 // 本地localcachex是对 https://github.com/coocood/freecache 的二次封装
 
 import (
-	"github.com/coocood/freecache"
 	"runtime/debug"
+
+	"github.com/coocood/freecache"
 )
 
 type LocalCache struct {
 	cacheSize int
-	cache *freecache.Cache
+	cache     *freecache.Cache
 }
-
 
 // NewLocalCache 新建LocalCache, 默认缓存大小512KB
 func NewLocalCache() *LocalCache {
-	return NewLocalCacheWithSize(1024*512)
+	return NewLocalCacheWithSize(1024 * 512)
 }
 
 // NewLocalCacheWithSize 指定缓存大小来新建LocalCache
@@ -23,15 +23,15 @@ func NewLocalCache() *LocalCache {
 // 	cacheSize: 指定本地缓存的大小，单位byte，最小512KB, 如果小于512KB将强制成512KB
 //  gcPercent: 如果设置的缓存比较大，可以设置合理的gc回收频率
 func NewLocalCacheWithSize(cacheSize int, gcPercent ...int) *LocalCache {
-	if len(gcPercent) > 0  && gcPercent[0] > 0 && gcPercent[0] < 100 {
+	if len(gcPercent) > 0 && gcPercent[0] > 0 && gcPercent[0] < 100 {
 		debug.SetGCPercent(gcPercent[0])
 	}
-	if cacheSize < 1024 * 512 {
+	if cacheSize < 1024*512 {
 		cacheSize = 1024 * 512
 	}
 	return &LocalCache{
 		cacheSize: cacheSize,
-		cache: freecache.NewCache(cacheSize),
+		cache:     freecache.NewCache(cacheSize),
 	}
 }
 
@@ -51,11 +51,10 @@ func (p *LocalCache) SetWithExpire(key []byte, value []byte, expireSeconds int) 
 	return p.cache.Set(key, value, expireSeconds)
 }
 
-
 // Get 查询key
 // 返回参数：
-// 	error: 如果未查找到key, error不为nil
-func (p *LocalCache) Get(key []byte) (value []byte, error error) {
+// 	err: 如果未查找到key, err不为nil
+func (p *LocalCache) Get(key []byte) (value []byte, err error) {
 	return p.cache.Get(key)
 }
 
@@ -72,7 +71,7 @@ func (p *LocalCache) ClearAll() {
 }
 
 // HitRate 缓存命中率
-func (p *LocalCache) HitRate() float64{
+func (p *LocalCache) HitRate() float64 {
 	return p.cache.HitRate()
 }
 
