@@ -1,9 +1,10 @@
-package syncx
+package funcx
 
 import (
-	"github.com/fengde/gocommon/logx"
 	"testing"
 	"time"
+
+	"github.com/fengde/gocommon/logx"
 )
 
 func TestFuncLocker_Exec(t *testing.T) {

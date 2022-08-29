@@ -1,4 +1,4 @@
-package toolx
+package funcx
 
 // Repeat 重复执行函数
 func Repeat(count int, f func()) {
