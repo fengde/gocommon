@@ -25,7 +25,6 @@ func NewTaskGroup(concurrency ...int64) *TaskGroup {
 
 // Run 执行任务
 func (p *TaskGroup) Run(fn func()) {
-
 	if p.limitChan != nil {
 		p.limitChan <- 1
 	}
