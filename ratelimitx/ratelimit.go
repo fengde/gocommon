@@ -1,5 +1,3 @@
-// 漏桶算法
-
 package ratelimitx
 
 import (
