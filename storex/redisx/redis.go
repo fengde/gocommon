@@ -12,7 +12,7 @@ type Client struct {
 }
 
 // NewClient 创建集群对象，同时适用单实例
-func NewClient(addr string, defaultDB int, password string) *Client {
+func NewClient(addr string, defaultDB int, password string) (*Client, error) {
 	client := redis.NewClient(&redis.Options{
 		Addr:         addr,
 		Password:     password,
@@ -26,7 +26,11 @@ func NewClient(addr string, defaultDB int, password string) *Client {
 		client: client,
 	}
 
-	return &c
+	if err := c.PingCheck(); err != nil {
+		return nil, err
+	}
+
+	return &c, nil
 }
 
 func (p *Client) getCtx() context.Context {

@@ -5,7 +5,7 @@ import (
 	"time"
 )
 
-var client = NewClient("127.0.0.1:6379", 0, "")
+var client, _ = NewClient("127.0.0.1:6379", 0, "")
 
 func TestClient_Del(t *testing.T) {
 	client.Set("test", "hello world")

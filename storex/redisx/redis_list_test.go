@@ -5,7 +5,7 @@ import (
 )
 
 func TestNewList(t *testing.T) {
-	client := NewClient("127.0.0.1:6379", 0, "")
+	client, _ := NewClient("127.0.0.1:6379", 0, "")
 	list := client.NewList("test")
 	if err := list.Push("abc"); err != nil {
 		t.Error(err)
