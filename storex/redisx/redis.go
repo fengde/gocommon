@@ -140,6 +140,17 @@ func (p *Client) NewList(listName string) *List {
 	return NewList(p, listName)
 }
 
+// GetClient获取原生client
+func (p *Client) GetClient() *redis.Client {
+	return p.client
+}
+
+// PingCheck 检查连接是否可用
+func (p *Client) PingCheck() error {
+	_, err := p.client.Ping(p.getCtx()).Result()
+	return err
+}
+
 // IsRedisNil 判断err是否为redis nil
 func IsRedisNil(err error) bool {
 	return err == redis.Nil
