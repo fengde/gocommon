@@ -7,16 +7,24 @@ import (
 	"github.com/dchest/captcha"
 )
 
-// 生成图像验证码
-func NewCaptchaImage() (captchatId string, link string) {
-	captchatId = captcha.New()
+// 生成图像验证码，二维码过期时间 10min
+func NewCaptchaImage(length ...int) (captchatId string, link string) {
+	if len(length) > 0 {
+		captchatId = captcha.NewLen(length[0])
+	} else {
+		captchatId = captcha.New()
+	}
 
 	return captchatId, fmt.Sprintf("/captcha/%s.png", captchatId)
 }
 
-// 生成音频验证码
-func NewCaptchaAudio() (captchatId string, link string) {
-	captchatId = captcha.New()
+// 生成音频验证码，二维码过期时间 10min
+func NewCaptchaAudio(length ...int) (captchatId string, link string) {
+	if len(length) > 0 {
+		captchatId = captcha.NewLen(length[0])
+	} else {
+		captchatId = captcha.New()
+	}
 
 	return captchatId, fmt.Sprintf("/captcha/download/%s.wav", captchatId)
 }
