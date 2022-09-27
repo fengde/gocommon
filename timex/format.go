@@ -43,6 +43,16 @@ func String2Time(s string) (time.Time, error) {
 	return t, nil
 }
 
+// DateString2Time 字符串日期转Time对象
+func DateString2Time(s string) (time.Time, error) {
+	loc, _ := time.LoadLocation("Asia/Shanghai")
+	t, err := time.ParseInLocation(DATE_LAYOUT, s, loc)
+	if err != nil {
+		return t, err
+	}
+	return t, nil
+}
+
 // Time2String Time对象转字符串时间
 func Time2String(t time.Time) string {
 	return t.Format(DATETIME_LAYOUT)

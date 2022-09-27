@@ -22,7 +22,10 @@ func TestNewCluster(t *testing.T) {
 	logx.Info(row1, err1)
 
 	var unit struct {
-		Id int64 `xorm:"id"`
+		Id int64      `xorm:"id"`
+		T1 NormalDate `xorm:"t1"`
+		T2 NormalTime `xorm:"t2"`
+		T3 string     `xorm:"t3"`
 	}
 	exist4, err4 := db.QueryOne(`select id from user where age=10 limit 1`, nil, &unit)
 	logx.Info(unit, exist4, err4)
