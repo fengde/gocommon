@@ -1,4 +1,4 @@
-package httpsx
+package tlsx
 
 import (
 	"crypto/tls"
