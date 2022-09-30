@@ -1,6 +1,7 @@
 package taskx
 
 import (
+	"fmt"
 	"testing"
 )
 
@@ -15,7 +16,8 @@ func TestNewSerialTaskGroup(t *testing.T) {
 	}
 	var c = func() error {
 		t.Log("c")
-		return nil
+		// return nil
+		return fmt.Errorf("error from c")
 	}
 	var panicHappen = func() error {
 		panic("wrong")
