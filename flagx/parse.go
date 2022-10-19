@@ -12,10 +12,12 @@ import (
 // 结构体格式示例：
 // 	var input struct {
 // 		Age   int     `flag:"age" default:"1" help:"input your age"`
-// 		User  string  `flag:"user" default:"fedel"  help:"input your user name"`
+// 		User  string  `flag:"user" default:"fedel" help:"input your user name"`
 // 		Money float64 `flag:"money" help:"input your money"`
 // 		Old   bool    `flag:"old" help:"are you old man"`
 // }
+// 命令行入参帮助：go run main.go --help
+// 命令行入参格式： go run main.go --age=32 --user=fedel --money=1000000 --old=true
 func Parse(v any) error {
 	ti := reflect.TypeOf(v)
 	vi := reflect.ValueOf(v)
