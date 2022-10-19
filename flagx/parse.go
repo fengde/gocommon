@@ -17,7 +17,7 @@ import (
 // 		Old   bool    `flag:"old" help:"are you old man"`
 // }
 // 命令行入参帮助：go run main.go --help
-// 命令行入参格式： go run main.go --age=32 --user=fedel --money=1000000 --old=true
+// 命令行入参格式：go run main.go --age=32 --user=fedel --money=1000000 --old=true
 func Parse(v any) error {
 	ti := reflect.TypeOf(v)
 	vi := reflect.ValueOf(v)
