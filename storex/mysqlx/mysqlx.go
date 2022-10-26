@@ -36,7 +36,10 @@ func NewCluster(dataSourceNames []string, connMaxLifetime time.Duration, maxOpen
 	eg.SetMaxOpenConns(maxOpenConns)
 	eg.SetMaxIdleConns(maxIdleConns)
 
-	if !(len(closeShowSQL) > 0 && closeShowSQL[0]) {
+	if len(closeShowSQL) > 0 && closeShowSQL[0] {
+		eg.ShowSQL(false)
+		eg.ShowExecTime(false)
+	} else {
 		eg.ShowSQL(true)
 		eg.ShowExecTime(true)
 	}
