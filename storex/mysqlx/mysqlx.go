@@ -37,14 +37,10 @@ func NewCluster(dataSourceNames []string, connMaxLifetime time.Duration, maxOpen
 	eg.SetMaxIdleConns(maxIdleConns)
 
 	if len(closeShowSQL) > 0 && closeShowSQL[0] {
-		eg.ShowSQL(false)
-		eg.ShowExecTime(false)
+		eg.SetLogLevel(core.LOG_WARNING)
 	} else {
-		eg.ShowSQL(true)
-		eg.ShowExecTime(true)
+		eg.SetLogLevel(core.LOG_INFO)
 	}
-
-	eg.SetLogLevel(core.LOG_INFO)
 
 	if err := eg.Ping(); err != nil {
 		return nil, errorx.WithStack(err)
