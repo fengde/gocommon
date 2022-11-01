@@ -7,7 +7,7 @@
     为了避免和系统包名冲突，包名统一加x 作为suffix，x表示增强的意思
 
 ---
-#### gocommon/timex： 时间格式转换
+#### timex： 时间格式转换
 使用： 
 ```
     import "github.com/fengde/gocommon/timex"
@@ -93,7 +93,7 @@ s := timex.Time2String(t)
 ```
 
 ---
-#### gocommon/jsonx：jsonx序列化便捷函数
+#### jsonx：json序列化便捷函数
 使用： 
 ```
     import "github.com/fengde/gocommon/jsonx"
@@ -109,7 +109,7 @@ s := timex.Time2String(t)
 ```
 
 ---
-#### gocommon/flagx：命令行参数读取
+#### flagx：命令行参数读取
     
 使用： 
 ```
@@ -128,7 +128,7 @@ s := timex.Time2String(t)
 struct成员变量类型目前支持int、int64、string、float64、bool类型，其他类型暂时不支持
 
 ---
-#### gocommon/safex：安全执行协程、函数、捕获异常等
+#### safex：安全执行协程、函数、捕获异常等
 使用：
 ```
     import "github.com/fengde/gocommon/safex"
@@ -145,7 +145,7 @@ struct成员变量类型目前支持int、int64、string、float64、bool类型�
 ```
 
 ---
-#### gocommon/slicex：数组相关操作
+#### slicex：数组相关操作
 使用：
 ```
     import "github.com/fengde/gocommon/slicex"  
@@ -181,7 +181,7 @@ int64数组移除重复的元素：
 ```
 ---
 
-#### gocommon/httpx：http相关操作
+#### httpx：http相关操作
 
 使用：
 ```
@@ -208,18 +208,157 @@ delete请求：
     httpx.DeleteJSON(url， headers, obj)
 ```
 
-    注意：
-        headers即请求头键值对
-        obj可以传string，[]byte，struct，map等格式，最终都会转换成json字符串
+
+headers即请求头键值对，obj可以传string，[]byte，struct，map等格式，最终都会转换成json字符串
 
 ---
-#### gocommon/confx：工程配置，从yaml文件读取配置
+#### confx：工程配置，从yaml文件读取配置
 使用：
 ```
     查看gocommon/confx/example
 ```
 
-    
-    
+---
+#### taskx：任务执行相关
+并发控制使用：
+```
+    import "github.com/fengde/gocommon/taskx"
+    func main() {
+        // 设置最大支持10个协程同时运行，不传入参数则不限制协程数
+        g := taskx.NewTaskGroup(10)
+        g.Run(func() {
+            fmt.Println("hello world")
+        })
+        g.Wait()
+    }
+```
+函数组串行执行：
+```    
+    import "github.com/fengde/gocommon/taskx"
+    func main() {
+        sg := taskx.NewSerialTaskGroup(func1, func2, func3)
+        // 顺序执行函数，遇到返回err的函数停止执行
+        if err := sg.Run(); err != nil {
+            fmt.Println(err)
+        }
+    }
+```
+
+---
+#### funcx: 函数执行相关
+使用：
+```
+    import "github.com/fengde/gocommon/funcx"
+```
+函数重试：
+```
+    // 最多重试3次，成功退出，每次重试中间sleep 1秒
+    funcx.Retry(3, time.Second, func(loop int) error {
+        fmt.Println("hello world")
+        return errorx.New("test retry")
+    })
+```
+函数重复执行：
+```
+    // 重复执行函数3次
+    funcx.Repeat(3, func() {
+        fmt.Println("hello world")
+    })
+```
+函数上锁：
+```
+    locker := funcx.NewFuncLocker()
+
+    index := 0
+    for index < 100 {
+        // Exec执行的函数，会竞争锁，得到锁才执行
+        go locker.Exec(func() {
+            fmt.Println("hello world")
+        })
+        index++
+    }
+
+```
+---
+#### base64x：base64编解码
+使用
+```
+    import "github.com/fengde/gocommon/base64x"
+```
+Url base64编解码
+```
+    t := base64x.UrlEncode([]byte("your url"))
+    t := base64x.UrlDecode("base64 string")
+```
+通用的base64编解码
+```
+    t := base64x.Encode([]byte("your url"))
+    t := base64x.Decode("base64 string")
+```
+
+---
+#### hashx: 哈希算法集合
+使用
+```
+    import "github.com/fengde/gocommon/hashx"
+```
+获取hash值：
+```
+    number := hashx.Hash([]byte(""))
+```
+获取md5值：
+```
+    md5Bytes := hashx.Md5([]byte(""))
+```
+获取md5 16进制字符串：
+```
+    md5HexStr := hashx.Md5Hex([]byte(""))
+```
+获取Sha256值：
+```
+    sha256Bytes := hashx.Sha256([]byte(""))
+```
+获取Sha256 16进制字符串：
+```
+    sha256Str := hashx.Sha256Hex([]byte(""))
+```
+
+---
+#### sendx/emailx：普通邮件发送
+使用
+```
+    import "github.com/fengde/gocommon/sendx/emailx"
+    client := emailx.NewEmailClient(host, port, user, password)
+    client.SendText(...)
+    client.SendHTML(...)
+```
+
+---
+#### sysx: 系统相关
+使用
+```
+    import "github.com/fengde/gocommon/sysx"
+```
+获取主机名：
+```
+    hostname := sysx.Hostname()
+```
 
 
+---
+#### ratelimitx: 限流算法
+使用
+```
+    import "github.com/fengde/gocommon/ratelimitx"
+```
+令牌桶算法限流：
+```
+    limiter := ratelimitx.NewTokenBucketRatelimit(...)
+    limiter.Run(...)
+    limiter.RunWithTimeout(...)
+```
+漏桶算法限流：
+```
+    limiter := NewLeakyBucketRatelimit(...)
+    limiter.Run(...)
+```
