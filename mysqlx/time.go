@@ -8,15 +8,15 @@ import (
 	"github.com/fengde/gocommon/timex"
 )
 
-// NormalTime 返回正常的时间格式 "2006-01-02 15:04:05"
-type NormalTime time.Time
+// Datetime 返回正常的时间格式 "2006-01-02 15:04:05"
+type Datetime time.Time
 
-func (t NormalTime) MarshalJSON() ([]byte, error) {
+func (t Datetime) MarshalJSON() ([]byte, error) {
 	var stamp = fmt.Sprintf("\"%s\"", t.Format())
 	return []byte(stamp), nil
 }
 
-func (t *NormalTime) UnmarshalJSON(b []byte) error {
+func (t *Datetime) UnmarshalJSON(b []byte) error {
 	if len(b) == 0 {
 		return nil
 	}
@@ -26,27 +26,27 @@ func (t *NormalTime) UnmarshalJSON(b []byte) error {
 		return err
 	}
 
-	*t = NormalTime(_t)
+	*t = Datetime(_t)
 	return nil
 }
 
-func (t NormalTime) Time() time.Time {
+func (t Datetime) Time() time.Time {
 	return time.Time(t)
 }
 
-func (t NormalTime) Format() string {
+func (t Datetime) Format() string {
 	return t.Time().Format("2006-01-02 15:04:05")
 }
 
-// NormalDate 返回正常的时间格式 "2006-01-02"
-type NormalDate time.Time
+// Date 返回正常的时间格式 "2006-01-02"
+type Date time.Time
 
-func (t NormalDate) MarshalJSON() ([]byte, error) {
+func (t Date) MarshalJSON() ([]byte, error) {
 	var stamp = fmt.Sprintf("\"%s\"", t.Format())
 	return []byte(stamp), nil
 }
 
-func (t *NormalDate) UnmarshalJSON(b []byte) error {
+func (t *Date) UnmarshalJSON(b []byte) error {
 	if len(b) == 0 {
 		return nil
 	}
@@ -56,14 +56,18 @@ func (t *NormalDate) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	*t = NormalDate(_t)
+	*t = Date(_t)
 	return nil
 }
 
-func (t NormalDate) Time() time.Time {
+func (t Date) Time() time.Time {
 	return time.Time(t)
 }
 
-func (t NormalDate) Format() string {
+func (t Date) Format() string {
 	return t.Time().Format("2006-01-02")
 }
+
+
+type NormalTime Datetime
+type NormalDate Date
