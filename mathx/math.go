@@ -34,3 +34,14 @@ func Rand(min, max int64) int64 {
 	}
 	return rand.Int63n(max+1-min) + min
 }
+
+// RandBatch 批量返回[min, max]之间的随机数n ( min<=n<=max)，min支持负数
+func RandBatch(min, max int64, n int) []int64 {
+	var list []int64
+	for n > 0 {
+		list = append(list, Rand(min, max))
+		n--
+	}
+
+	return list
+}

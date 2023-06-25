@@ -20,8 +20,9 @@ func NewLocalCache() *LocalCache {
 
 // NewLocalCacheWithSize 指定缓存大小来新建LocalCache
 // 参数:
-// 	cacheSize: 指定本地缓存的大小，单位byte，最小512KB, 如果小于512KB将强制成512KB
-//  gcPercent: 如果设置的缓存比较大，可以设置合理的gc回收频率
+//
+//	cacheSize: 指定本地缓存的大小，单位byte，最小512KB, 如果小于512KB将强制成512KB
+//	gcPercent: 如果设置的缓存比较大，可以设置合理的gc回收频率
 func NewLocalCacheWithSize(cacheSize int, gcPercent ...int) *LocalCache {
 	if len(gcPercent) > 0 && gcPercent[0] > 0 && gcPercent[0] < 100 {
 		debug.SetGCPercent(gcPercent[0])
@@ -37,30 +38,31 @@ func NewLocalCacheWithSize(cacheSize int, gcPercent ...int) *LocalCache {
 
 // Set 插入kv，key不过期
 // 注意：
-// 	如果缓存满了，历史key可能被新key取代
+//
+//	如果缓存满了，历史key可能被新key取代
 func (p *LocalCache) Set(key []byte, value []byte) error {
 	return p.SetWithExpire(key, value, 0)
 }
 
 // SetWithExpire 插入kv, 设置过期时间
 // 参数：
-// 	expireSeconds 如果 <=0，表示key不过期
+//
+//	expireSeconds 如果 <=0，表示key不过期
+//
 // 注意：
-// 	如果缓存满了，历史key可能被新key取代
+//
+//	如果缓存满了，历史key可能被新key取代
 func (p *LocalCache) SetWithExpire(key []byte, value []byte, expireSeconds int) error {
 	return p.cache.Set(key, value, expireSeconds)
 }
 
 // Get 查询key
-// 返回参数：
-// 	err: 如果未查找到key, err不为nil
+// 返回参数：err: 如果未查找到key, err不为nil
 func (p *LocalCache) Get(key []byte) (value []byte, err error) {
 	return p.cache.Get(key)
 }
 
-// Del 删除key
-// 返回参数：
-// 	bool: 命中删除，bool->true; 否则false
+// Del 删除key 命中删除，返回true; 否则false
 func (p *LocalCache) Del(key []byte) bool {
 	return p.cache.Del(key)
 }
@@ -78,4 +80,25 @@ func (p *LocalCache) HitRate() float64 {
 // TTL key剩下的TTL时长
 func (p *LocalCache) TTL(key []byte) (timeLeft uint32, err error) {
 	return p.cache.TTL(key)
+}
+
+// 获取本地缓存，不存在的时候直接调用刷新
+func (p *LocalCache) GetReflush(key []byte, reflush func() (value []byte, err error), expireSeconds int) ([]byte, error) {
+	v, err := p.Get(key)
+	if err != nil {
+		if err == freecache.ErrNotFound {
+			if v, err = reflush(); err != nil {
+				return nil, err
+			}
+			if err := p.SetWithExpire(key, v, expireSeconds); err != nil {
+				return nil, err
+			}
+
+			return v, nil
+		}
+
+		return nil, err
+	}
+
+	return v, nil
 }

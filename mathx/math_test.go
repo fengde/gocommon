@@ -8,4 +8,5 @@ func TestRand(t *testing.T) {
 	t.Log(Rand(-8, -1))
 	t.Log(Rand(1, 5))
 	t.Log(Rand(1, 1))
+	t.Log(RandBatch(1, 1000, 30))
 }
