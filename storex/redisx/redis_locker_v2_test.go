@@ -17,7 +17,7 @@ func TestNewLockerV2(t *testing.T) {
 	index := 0
 	for index < 2 {
 		g.Run(func() {
-			ok, err := locker.LockBlock("fedelfeng", 15, func() {
+			ok, err := locker.LockBlock(context.Background(), "fedelfeng", 15, func() {
 				ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 				defer cancel()
 

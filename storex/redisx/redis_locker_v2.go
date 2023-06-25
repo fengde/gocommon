@@ -1,6 +1,8 @@
 package redisx
 
 import (
+	"context"
+
 	"github.com/fengde/gocommon/safex"
 )
 
@@ -17,14 +19,14 @@ func NewLockerV2(client *Client) *LockerV2 {
 
 // Lock 执行函数，非阻塞
 // 返回值：锁成功 返回true，nil; 锁失败 返回false, err
-func (p *LockerV2) Lock(sourceID string, autoUnlockSecond int64, fn func()) (bool, error) {
+func (p *LockerV2) Lock(ctx context.Context, sourceID string, autoUnlockSecond int64, fn func()) (bool, error) {
 	locker := NewLocker(p.client, sourceID, autoUnlockSecond)
-	ok, err := locker.Lock()
+	ok, err := locker.Lock(ctx)
 	if err != nil || !ok {
 		return ok, err
 	}
 
-	defer locker.Unlock()
+	defer locker.Unlock(ctx)
 
 	safex.Func(fn)
 
@@ -33,15 +35,15 @@ func (p *LockerV2) Lock(sourceID string, autoUnlockSecond int64, fn func()) (boo
 
 // LockBlock 执行函数，阻塞
 // 返回值：锁成功 返回true，nil; 锁失败 返回false, err
-func (p *LockerV2) LockBlock(sourceID string, autoUnlockSecond int64, fn func()) (bool, error) {
+func (p *LockerV2) LockBlock(ctx context.Context, sourceID string, autoUnlockSecond int64, fn func()) (bool, error) {
 	locker := NewLocker(p.client, sourceID, autoUnlockSecond)
 
-	ok, err := locker.LockBlock()
+	ok, err := locker.LockBlock(ctx)
 	if err != nil || !ok {
 		return ok, err
 	}
 
-	defer locker.Unlock()
+	defer locker.Unlock(ctx)
 
 	safex.Func(fn)
 

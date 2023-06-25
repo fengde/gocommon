@@ -1,6 +1,7 @@
 package redisx
 
 import (
+	"context"
 	"fmt"
 	"time"
 
@@ -28,8 +29,8 @@ func NewLocker(client *Client, sourceID string, autoUnlockSecond int64) *Locker 
 
 // Lock 非阻塞上锁
 // 返回值：锁成功 返回true, nil; 锁失败 返回false
-func (p *Locker) Lock() (bool, error) {
-	err := p.client.client.Do(p.client.getCtx(), "SET", p.key, p.value, "EX", p.autoUnlockSecond, "NX").Err()
+func (p *Locker) Lock(ctx context.Context) (bool, error) {
+	err := p.client.client.Do(ctx, "SET", p.key, p.value, "EX", p.autoUnlockSecond, "NX").Err()
 	if err == redis.Nil {
 		return false, nil
 	}
@@ -41,9 +42,9 @@ func (p *Locker) Lock() (bool, error) {
 
 // LockBlock 阻塞上锁
 // 返回值：锁成功 返回true, nil; 锁失败 返回false
-func (p *Locker) LockBlock() (bool, error) {
+func (p *Locker) LockBlock(ctx context.Context) (bool, error) {
 	for {
-		ok, err := p.Lock()
+		ok, err := p.Lock(ctx)
 		if err != nil {
 			return false, errorx.WithStack(err)
 		}
@@ -57,13 +58,13 @@ func (p *Locker) LockBlock() (bool, error) {
 }
 
 // Unlock 释放锁
-func (p *Locker) Unlock() error {
-	value, err := p.client.GetString(p.key)
+func (p *Locker) Unlock(ctx context.Context) error {
+	value, err := p.client.GetString(ctx, p.key)
 	if err != nil {
 		return errorx.WithStack(err)
 	}
 	if value == p.value {
-		if err := p.client.Del(p.key); err != nil {
+		if err := p.client.Del(ctx, p.key); err != nil {
 			return errorx.WithStack(err)
 		}
 	}
