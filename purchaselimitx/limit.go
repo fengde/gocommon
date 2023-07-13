@@ -153,26 +153,31 @@ func (p *PurchaseLimit) flushCache(ctx context.Context, key string, cache Purcha
 }
 
 func (p *PurchaseLimit) judgeWindow(start time.Time, now time.Time) bool {
+	if p.typ == PurchaseLimitTypeLasting {
+		return true
+	}
+	if p.typ == PurchaseLimitTypeDuration {
+		return now.After(start) && now.Unix()-start.Unix() < p.durateion
+	}
+
+	var t1, t2 time.Time
+
 	switch p.typ {
 	case PurchaseLimitTypeDay:
-		t1, _ := time.ParseInLocation("2006-01-02 15:04:05", start.Format("2006-01-02 ")+p.at, time.Local)
-		t2, _ := time.ParseInLocation("2006-01-02 15:04:05", start.AddDate(0, 0, 1).Format("2006-01-02 ")+p.at, time.Local)
-
-		return now.After(start) && start.After(t1) && now.Before(t2)
+		t1, _ = time.ParseInLocation("2006-01-02 15:04:05", start.Format("2006-01-02 ")+p.at, time.Local)
+		t2, _ = time.ParseInLocation("2006-01-02 15:04:05", start.AddDate(0, 0, 1).Format("2006-01-02 ")+p.at, time.Local)
 	case PurchaseLimitTypeWeek:
 		reduce := int(start.Weekday()) - 1
 		if reduce == -1 {
 			reduce = 6
 		}
-		t1, _ := time.ParseInLocation("2006-01-02 15:04:05", start.AddDate(0, 0, -reduce).Format("2006-01-02 ")+p.at, time.Local)
-		t2, _ := time.ParseInLocation("2006-01-02 15:04:05", start.AddDate(0, 0, 7-reduce).Format("2006-01-02 ")+p.at, time.Local)
+		t1, _ = time.ParseInLocation("2006-01-02 15:04:05", start.AddDate(0, 0, -reduce).Format("2006-01-02 ")+p.at, time.Local)
+		t2, _ = time.ParseInLocation("2006-01-02 15:04:05", start.AddDate(0, 0, 7-reduce).Format("2006-01-02 ")+p.at, time.Local)
+	}
 
-		return now.After(start) && start.After(t1) && now.Before(t2)
-	case PurchaseLimitTypeDuration:
-
-		return now.After(start) && now.Unix()-start.Unix() < p.durateion
-	case PurchaseLimitTypeLasting:
-
+	switch {
+	case now.After(start) && start.Before(t1) && now.Before(t1),
+		now.After(start) && start.After(t1) && now.Before(t2):
 		return true
 	}
 
