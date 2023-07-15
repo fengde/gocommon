@@ -3,9 +3,11 @@ package apierrx
 import "errors"
 
 // 通用Code, 实际工程下，定义自己服务的Code
-// 高1位 固定标识
-// 高2-4位 服务编码
-// 高5-7位 逻辑错误编码
+// code编码规范：
+//
+//	    高1位   固定标识
+//		高2-4位 服务编码
+//	    高5-7位 逻辑编码
 var (
 	CommonAPICodeErrArg     = NewAPICode(1000001, "参数错误")
 	CommonAPICodeErrData    = NewAPICode(1000002, "数据错误")
@@ -19,7 +21,8 @@ type IAPICode interface {
 	Code() int
 	Message() string
 	Reference() string
-	HTTPStatus() int
+	ServiceCode() int
+	BusinessCode() int
 }
 
 func NewAPICode(code int, message string, reference ...string) IAPICode {
@@ -53,15 +56,13 @@ func (a *apiCode) Reference() string {
 	return a.ref
 }
 
-func (a *apiCode) HTTPStatus() int {
-	return a.Code() / 1000000
-}
-
-func (a *apiCode) ServiceNumber() int {
+// ServiceCode 服务编码
+func (a *apiCode) ServiceCode() int {
 	return a.Code() % 1000000 / 1000
 }
 
-func (a *apiCode) LogicNumber() int {
+// BusinessCode 逻辑编码
+func (a *apiCode) BusinessCode() int {
 	return a.Code() % 1000
 }
 
