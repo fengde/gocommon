@@ -1,6 +1,9 @@
 package timex
 
-import "strings"
+import (
+	"strings"
+	"time"
+)
 
 const (
 	Monday    = "Monday"    // 星期一
@@ -95,4 +98,16 @@ func StringTimeCompareIsT1BeforeT2(t1 string, t2 string) bool {
 // StringTimeCompareIsT1AfterT2 比较两个时间(2006-01-02 15:04:05)，如果t1 在 t2 之后返回true，否则返回false
 func StringTimeCompareIsT1AfterT2(t1 string, t2 string) bool {
 	return String2Unix(t1) > String2Unix(t2)
+}
+
+// IntervalDays 两个时间相隔日期天数，比如2023-07-21 12:00:00 与2023-07-22 00:00:00 日期上相隔2天
+func IntervalDays(t1 time.Time, t2 time.Time) int {
+	t1 = time.Date(t1.Year(), t1.Month(), t1.Day(), 0, 0, 0, 0, time.Local)
+	t2 = time.Date(t2.Year(), t2.Month(), t2.Day(), 0, 0, 0, 0, time.Local)
+
+	if t1.After(t2) {
+		return int(t1.Sub(t2).Hours()/24) + 1
+	}
+
+	return int(t2.Sub(t1).Hours()/24) + 1
 }
