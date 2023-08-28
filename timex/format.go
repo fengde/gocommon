@@ -97,3 +97,33 @@ func NowUnixNano() int64 {
 func Now() time.Time {
 	return time.Now()
 }
+
+// GetTodayStartTime 获取今天开始时间，如 "xxxx-xx-xx 00:00:00"
+func GetTodayStartTime() string {
+	return NowDateString() + " 00:00:00"
+}
+
+// GetTodayEndTime 获取今天结束时间，如 "xxxx-xx-xx 23:59:59"
+func GetTodayEndTime() string {
+	return NowDateString() + " 23:59:59"
+}
+
+// AddSecond 增加秒
+func AddSecond(t time.Time, second int64) time.Time {
+	return t.Add(time.Second * time.Duration(second))
+}
+
+// AddMinute 增加分钟
+func AddMinute(t time.Time, minute int64) time.Time {
+	return t.Add(time.Minute * time.Duration(minute))
+}
+
+// AddHour 增加小时
+func AddHour(t time.Time, hour int64) time.Time {
+	return t.Add(time.Hour * time.Duration(hour))
+}
+
+// AddDate 新增年月日，year，month, day 均可以指定负数，代表之前的某个时间
+func AddDate(t time.Time, year, month, day int) time.Time {
+	return t.AddDate(year, month, day)
+}

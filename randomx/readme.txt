@@ -1,0 +1,1 @@
+copy from https://github.com/duke-git/lancet/blob/main/random/random.go
