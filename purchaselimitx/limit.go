@@ -8,7 +8,7 @@ import (
 	"github.com/fengde/gocommon/errorx"
 	"github.com/fengde/gocommon/jsonx"
 	"github.com/fengde/gocommon/logx"
-	"github.com/fengde/gocommon/storex/redisx"
+	"github.com/fengde/gocommon/redisx"
 )
 
 type PurchaseLimitType uint64
@@ -139,12 +139,12 @@ func (p *PurchaseLimit) Check(ctx context.Context, actityId string) error {
 
 func (p *PurchaseLimit) flushCache(ctx context.Context, key string, cache PurchaseLimitCache) error {
 
-	if err := p.cli.Set(ctx, key, jsonx.MarshalToStringNoErr(cache)); err != nil {
+	if err := p.cli.Set(key, jsonx.MarshalToStringNoErr(cache)); err != nil {
 		return err
 	}
 
 	if p.expire > 0 {
-		if err := p.cli.Exipre(ctx, key, time.Duration(p.expire)*time.Second); err != nil {
+		if err := p.cli.Exipre(key, time.Duration(p.expire)*time.Second); err != nil {
 			return err
 		}
 	}
@@ -205,7 +205,7 @@ func (p *PurchaseLimit) GetUseCount(ctx context.Context, actityId string) (uint6
 
 // todo
 func (p *PurchaseLimit) getCache(ctx context.Context, key string) (*PurchaseLimitCache, error) {
-	str, err := p.cli.GetString(ctx, key)
+	str, err := p.cli.GetString(key)
 	if err != nil {
 		return nil, err
 	}
