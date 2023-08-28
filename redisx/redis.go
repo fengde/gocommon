@@ -134,11 +134,6 @@ func (p *Client) Do(args ...interface{}) *redis.Cmd {
 	return p.client.Do(p.getCtx(), args...)
 }
 
-// NewLocker 创建分布式锁
-func (p *Client) NewLocker(sourceID string, autoUnlockSecond int64) *Locker {
-	return NewLocker(p, sourceID, autoUnlockSecond)
-}
-
 // NewList 创建分布式队列
 func (p *Client) NewList(listName string) *List {
 	return NewList(p, listName)

@@ -3,7 +3,6 @@ package filex
 import (
 	"fmt"
 	"io"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 )
@@ -18,7 +17,7 @@ func Write(path string, reader io.Reader, mode ...os.FileMode) error {
 		}
 	}
 
-	content, err := ioutil.ReadAll(reader)
+	content, err := io.ReadAll(reader)
 	if err != nil {
 		return err
 	}
@@ -28,7 +27,12 @@ func Write(path string, reader io.Reader, mode ...os.FileMode) error {
 		modePerm = mode[0]
 	}
 
-	return ioutil.WriteFile(path, content, modePerm)
+	return os.WriteFile(path, content, modePerm)
+}
+
+// WriteAppend 追加写文件
+func WriteAppend(path string, reader io.Reader) error {
+	return Write(path, reader, os.ModeAppend)
 }
 
 // IsDirExist 文件夹是否存在
