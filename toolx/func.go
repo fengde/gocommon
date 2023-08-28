@@ -14,6 +14,7 @@ func RepeatFunc(n int, f func()) {
 // TickerFunc 定时执行函数f, 间隔d时长
 func TickerFunc(d time.Duration, f func()) {
 	ticker := time.NewTicker(d)
+	defer ticker.Stop()
 
 	for range ticker.C {
 		f()
