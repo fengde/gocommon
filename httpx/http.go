@@ -19,23 +19,30 @@ func newResponse(resp *resty.Response) *Response {
 	}
 }
 
+type GetInput struct {
+	Url     string
+	Headers map[string]string
+	Params  map[string]string
+	Timeout time.Duration
+}
+
 // Get 通用的http/get请求封装
-func Get(url string, headers map[string]string, params map[string]string, timeout ...time.Duration) (*Response, error) {
+func Get(input *GetInput) (*Response, error) {
 	var r *resty.Request
-	if len(timeout) > 0 {
-		r = resty.New().SetTimeout(timeout[0]).R()
+	if input.Timeout > 0 {
+		r = resty.New().SetTimeout(input.Timeout).R()
 	} else {
 		r = resty.New().R()
 	}
 
-	if len(headers) > 0 {
-		r.SetHeaders(headers)
+	if len(input.Headers) > 0 {
+		r.SetHeaders(input.Headers)
 	}
-	if len(params) > 0 {
-		r.SetQueryParams(params)
+	if len(input.Params) > 0 {
+		r.SetQueryParams(input.Params)
 	}
 
-	resp, err := r.EnableTrace().Get(url)
+	resp, err := r.EnableTrace().Get(input.Url)
 	if err != nil {
 		return nil, errorx.WithStack(err)
 	}
@@ -43,67 +50,121 @@ func Get(url string, headers map[string]string, params map[string]string, timeou
 	return newResponse(resp), nil
 }
 
+type PostFormInput struct {
+	Url     string
+	Headers map[string]string
+	Body    map[string]interface{}
+	Timeout time.Duration
+}
+
 // PostForm 通用的http/post application/x-www-form-urlencoded 请求封装
-func PostForm(url string, headers map[string]string, body map[string]interface{}, timeout ...time.Duration) (*Response, error) {
-	if headers == nil {
-		headers = map[string]string{}
+func PostForm(input *PostFormInput) (*Response, error) {
+	if input.Headers == nil {
+		input.Headers = map[string]string{}
 	}
 
 	_body := map[string]string{}
-	for k, v := range body {
+	for k, v := range input.Body {
 		_body[k] = fmt.Sprintf("%v", v)
 	}
 
-	headers["Content-Type"] = "application/x-www-form-urlencoded; charset=utf-8"
+	input.Headers["Content-Type"] = "application/x-www-form-urlencoded; charset=utf-8"
 
-	return do("post", url, headers, _body, timeout...)
+	if input.Timeout > 0 {
+		return do("post", input.Url, input.Headers, _body, input.Timeout)
+	}
+
+	return do("post", input.Url, input.Headers, _body)
+}
+
+type PostXMLInput struct {
+	Url     string
+	Headers map[string]string
+	Body    string
+	Timeout time.Duration
 }
 
 // PostXML 通用的http/post text/xml 请求封装
-func PostXML(url string, headers map[string]string, body string, timeout ...time.Duration) (*Response, error) {
-	if headers == nil {
-		headers = map[string]string{}
+func PostXML(input *PostXMLInput) (*Response, error) {
+	if input.Headers == nil {
+		input.Headers = map[string]string{}
 	}
 
-	headers["Content-Type"] = "text/xml; charset=utf-8"
+	input.Headers["Content-Type"] = "text/xml; charset=utf-8"
 
-	return do("post", url, headers, body, timeout...)
+	if input.Timeout > 0 {
+		return do("post", input.Url, input.Headers, input.Body, input.Timeout)
+	}
+
+	return do("post", input.Url, input.Headers, input.Body)
+}
+
+type PostJSONInput struct {
+	Url     string
+	Headers map[string]string
+	Body    interface{}
+	Timeout time.Duration
 }
 
 // PostJSON 通用的http/post application/json 请求封装;
 // body参数支持传：string，[]byte，struct，map
-func PostJSON(url string, headers map[string]string, body interface{}, timeout ...time.Duration) (*Response, error) {
-	if headers == nil {
-		headers = map[string]string{}
+func PostJSON(input *PostJSONInput) (*Response, error) {
+	if input.Headers == nil {
+		input.Headers = map[string]string{}
 	}
 
-	headers["Content-Type"] = "application/json; charset=utf-8"
+	input.Headers["Content-Type"] = "application/json; charset=utf-8"
 
-	return do("post", url, headers, body, timeout...)
+	if input.Timeout > 0 {
+		return do("post", input.Url, input.Headers, input.Body, input.Timeout)
+	}
+
+	return do("post", input.Url, input.Headers, input.Body)
+}
+
+type PutJSONInput struct {
+	Url     string
+	Headers map[string]string
+	Body    interface{}
+	Timeout time.Duration
 }
 
 // PutJSON 通用的Put方法 application/json 请求封装;
 // body参数支持传：string，[]byte，struct，map
-func PutJSON(url string, headers map[string]string, body interface{}, timeout ...time.Duration) (*Response, error) {
-	if headers == nil {
-		headers = map[string]string{}
+func PutJSON(input *PutJSONInput) (*Response, error) {
+	if input.Headers == nil {
+		input.Headers = map[string]string{}
 	}
 
-	headers["Content-Type"] = "application/json; charset=utf-8"
+	input.Headers["Content-Type"] = "application/json; charset=utf-8"
 
-	return do("put", url, headers, body, timeout...)
+	if input.Timeout > 0 {
+		return do("put", input.Url, input.Headers, input.Body, input.Timeout)
+	}
+
+	return do("put", input.Url, input.Headers, input.Body)
+}
+
+type DeleteJSONInput struct {
+	Url     string
+	Headers map[string]string
+	Body    interface{}
+	Timeout time.Duration
 }
 
 // DeleteJSON 通用的Delete方法 application/json 请求封装;
 // body参数支持传：string，[]byte，struct，map
-func DeleteJSON(url string, headers map[string]string, body interface{}, timeout ...time.Duration) (*Response, error) {
-	if headers == nil {
-		headers = map[string]string{}
+func DeleteJSON(input *DeleteJSONInput) (*Response, error) {
+	if input.Headers == nil {
+		input.Headers = map[string]string{}
 	}
 
-	headers["Content-Type"] = "application/json; charset=utf-8"
+	input.Headers["Content-Type"] = "application/json; charset=utf-8"
+	if input.Timeout > 0 {
+		return do("delete", input.Url, input.Headers, input.Body, input.Timeout)
+	}
 
-	return do("delete", url, headers, body, timeout...)
+	return do("delete", input.Url, input.Headers, input.Body)
 }
 
 func do(method string, url string, headers map[string]string, body interface{}, timeout ...time.Duration) (*Response, error) {
