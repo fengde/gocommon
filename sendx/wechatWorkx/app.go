@@ -36,9 +36,12 @@ func (p *APPClient) getAccessToken() (string, error) {
 	if !token.ExpiredAt.IsZero() && time.Now().Before(token.ExpiredAt) {
 		return token.Token, nil
 	}
-	resp, err := httpx.Get(`https://qyapi.weixin.qq.com/cgi-bin/gettoken`, nil, map[string]string{
-		"corpid":     p.CorpID,
-		"corpsecret": p.CorpSecret,
+	resp, err := httpx.Get(&httpx.GetInput{
+		Url: `https://qyapi.weixin.qq.com/cgi-bin/gettoken`,
+		Params: map[string]string{
+			"corpid":     p.CorpID,
+			"corpsecret": p.CorpSecret,
+		},
 	})
 	if err != nil {
 		return "", err
@@ -79,7 +82,10 @@ func (p *APPClient) Send(data string) error {
 
 	logx.Info(accessToken)
 
-	resp, err := httpx.PostJSON(`https://qyapi.weixin.qq.com/cgi-bin/message/send?debug=1&access_token=`+accessToken, nil, data)
+	resp, err := httpx.PostJSON(&httpx.PostJSONInput{
+		Url:  `https://qyapi.weixin.qq.com/cgi-bin/message/send?debug=1&access_token=` + accessToken,
+		Body: data,
+	})
 	if err != nil {
 		return err
 	}
@@ -107,10 +113,13 @@ func (p *APPClient) NewChatGroup(title string, owner string, users []string) (st
 		return "", err
 	}
 
-	resp, err := httpx.PostJSON(`https://qyapi.weixin.qq.com/cgi-bin/appchat/create?debug=1&access_token=`+accessToken, nil, map[string]interface{}{
-		"name":     title,
-		"owner":    owner,
-		"userlist": users,
+	resp, err := httpx.PostJSON(&httpx.PostJSONInput{
+		Url: `https://qyapi.weixin.qq.com/cgi-bin/appchat/create?debug=1&access_token=` + accessToken,
+		Body: map[string]interface{}{
+			"name":     title,
+			"owner":    owner,
+			"userlist": users,
+		},
 	})
 	if err != nil {
 		return "", err
@@ -143,7 +152,10 @@ func (p *APPClient) SendToGroup(data string) error {
 		return err
 	}
 
-	resp, err := httpx.PostJSON(`https://qyapi.weixin.qq.com/cgi-bin/appchat/send?debug=1&access_token=`+accessToken, nil, data)
+	resp, err := httpx.PostJSON(&httpx.PostJSONInput{
+		Url:  `https://qyapi.weixin.qq.com/cgi-bin/appchat/send?debug=1&access_token=` + accessToken,
+		Body: data,
+	})
 	if err != nil {
 		return err
 	}

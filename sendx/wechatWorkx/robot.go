@@ -33,7 +33,10 @@ func (p *RobotClient) Send(key, data string) error {
 		return errorx.Errorf(`内容不存在: %s`, msgtype)
 	}
 
-	resp, err := httpx.PostJSON(`https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=`+key, nil, data)
+	resp, err := httpx.PostJSON(&httpx.PostJSONInput{
+		Url:  `https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=` + key,
+		Body: data,
+	})
 	if err != nil {
 		return err
 	}
