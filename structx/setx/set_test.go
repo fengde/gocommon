@@ -53,7 +53,7 @@ func TestSet_LeftDifference(t *testing.T) {
 	set2 := Set{}
 	set1.Store(1, 2, 3, 4)
 	set2.Store(1, 3, 5, 8)
-	t.Log(set1.LeftDifference(set2))
-	t.Log(set1.RightDifference(set2))
-	t.Log(set1.InnerHave(set2))
+	t.Log(set1.LeftDifference(&set2))
+	t.Log(set1.RightDifference(&set2))
+	t.Log(set1.InnerHave(&set2))
 }

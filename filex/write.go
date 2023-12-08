@@ -76,8 +76,15 @@ func WriteStringToFile(filepath string, content string, append bool) error {
 }
 
 // WriteBytesToFile 写bytes到文件
-func WriteBytesToFile(filepath string, content []byte) error {
-	f, err := os.OpenFile(filepath, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0644)
+func WriteBytesToFile(filepath string, content []byte, append bool) error {
+	var flag int
+	if append {
+		flag = os.O_RDWR | os.O_CREATE | os.O_APPEND
+	} else {
+		flag = os.O_RDWR | os.O_CREATE | os.O_TRUNC
+	}
+
+	f, err := os.OpenFile(filepath, flag, 0644)
 	if err != nil {
 		return err
 	}

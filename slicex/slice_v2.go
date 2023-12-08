@@ -23,3 +23,10 @@ func RemoveRepeat[T comparable](arr []T) []T {
 
 	return newArr
 }
+
+// ForEach 遍历数组中的元素
+func ForEach[T comparable](arr []T, fn func(t T)) {
+	for _, t := range arr {
+		fn(t)
+	}
+}

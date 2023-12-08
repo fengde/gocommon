@@ -1,29 +1,30 @@
 package safex
 
 import (
+	"context"
 	"runtime/debug"
 
 	"github.com/fengde/gocommon/logx"
 )
 
-// Func 安全执行，内部已处理异常捕获
-func Func(fn func()) {
+// FuncCtx 安全执行，内部已处理异常捕获
+func FuncCtx(ctx context.Context, fn func()) {
 	func() {
-		defer Recover()
+		defer RecoverCtx(ctx)
 		fn()
 	}()
 }
 
-// Go 执行并发协程，内部已处理异常捕获
-func Go(fn func()) {
-	go Func(fn)
+// GoCtx 执行并发协程，内部已处理异常捕获
+func GoCtx(ctx context.Context, fn func()) {
+	go FuncCtx(ctx, fn)
 }
 
-// Recover 封装了语言recover，支持传入扫尾函数
-func Recover(cleanups ...func()) {
+// RecoverCtx 封装了语言recover，支持传入扫尾函数
+func RecoverCtx(ctx context.Context, cleanups ...func()) {
 	if p := recover(); p != nil {
-		logx.Error(p)
-		logx.Error(string(debug.Stack()))
+		logx.ErrorWithCtx(ctx, p)
+		logx.ErrorWithCtx(ctx, string(debug.Stack()))
 	}
 	for _, cleanup := range cleanups {
 		cleanup()

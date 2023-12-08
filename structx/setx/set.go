@@ -7,6 +7,11 @@ type Set struct {
 	m sync.Map
 }
 
+// NewSet 新建set对象
+func NewSet() *Set {
+	return &Set{}
+}
+
 // Has 判断集合中是否存在值，返回bool
 func (p *Set) Has(v interface{}) bool {
 	_, ok := p.m.Load(v)
@@ -38,7 +43,7 @@ func (p *Set) Items() []interface{} {
 }
 
 // LeftDifference 想象A，B两个圈，公共区域相交在一起，此函数返回A圈特有的部分
-func (p *Set) LeftDifference(b Set) []interface{} {
+func (p *Set) LeftDifference(b *Set) []interface{} {
 	var left []interface{}
 	for _, v := range p.Items() {
 		if !b.Has(v) {
@@ -49,7 +54,7 @@ func (p *Set) LeftDifference(b Set) []interface{} {
 }
 
 // RightDifference 想象A，B两个圈，公共区域相交在一起，此函数返回B圈特有的部分
-func (p *Set) RightDifference(b Set) []interface{} {
+func (p *Set) RightDifference(b *Set) []interface{} {
 	var right []interface{}
 	for _, v := range b.Items() {
 		if !p.Has(v) {
@@ -60,7 +65,7 @@ func (p *Set) RightDifference(b Set) []interface{} {
 }
 
 // InnerHave 想象A，B两个圈，公共区域相交在一起，此函数返回A、B共有的部分
-func (p *Set) InnerHave(b Set) []interface{} {
+func (p *Set) InnerHave(b *Set) []interface{} {
 	var inner []interface{}
 	for _, v := range p.Items() {
 		if b.Has(v) {
