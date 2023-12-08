@@ -1,5 +1,6 @@
 package slicex
 
+// Deprecated: Use Contains instead.
 func StrContains(arr []string, item string) bool {
 	for _, t := range arr {
 		if t == item {
@@ -9,6 +10,7 @@ func StrContains(arr []string, item string) bool {
 	return false
 }
 
+// Deprecated: Use Contains instead.
 func IntContains(arr []int, item int) bool {
 	for _, t := range arr {
 		if t == item {
@@ -18,6 +20,7 @@ func IntContains(arr []int, item int) bool {
 	return false
 }
 
+// Deprecated: Use Contains instead.
 func Int64Contains(arr []int64, item int64) bool {
 	for _, t := range arr {
 		if t == item {
@@ -27,6 +30,7 @@ func Int64Contains(arr []int64, item int64) bool {
 	return false
 }
 
+// Deprecated: Use RemoveRepeat instead.
 func StrRemoveRepeat(arr []string) []string {
 	var newArr []string
 	var m = map[string]int{}
@@ -40,6 +44,7 @@ func StrRemoveRepeat(arr []string) []string {
 	return newArr
 }
 
+// Deprecated: Use RemoveRepeat instead.
 func IntRemoveRepeat(arr []int) []int {
 	var newArr []int
 	var m = map[int]int{}
@@ -53,6 +58,7 @@ func IntRemoveRepeat(arr []int) []int {
 	return newArr
 }
 
+// Deprecated: Use RemoveRepeat instead.
 func Int64RemoveRepeat(arr []int64) []int64 {
 	var newArr []int64
 	var m = map[int64]int{}
