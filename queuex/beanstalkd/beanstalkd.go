@@ -4,9 +4,9 @@ import (
 	"time"
 
 	gobeanstalk "github.com/beanstalkd/go-beanstalk"
-	"github.com/fengde/gocommon/errorx"
 	"github.com/fengde/gocommon/safex"
 	"github.com/fengde/gocommon/taskx"
+	"github.com/pkg/errors"
 )
 
 type Queue struct {
@@ -17,8 +17,11 @@ type Queue struct {
 	close       chan int
 }
 
-/* NewQueue 新建队列
+/*
+	NewQueue 新建队列
+
 参数：
+
 	address - beanstalkd地址
 	topic - 队列名称，cube名称
 	ttr - callback执行超时，超时任务将回到队列，重新被消费
@@ -32,7 +35,7 @@ func NewQueue(address string, topic string, ttr time.Duration, concurrency int, 
 	}
 
 	if concurrency < 1 {
-		return nil, errorx.New("concurrency is valild")
+		return nil, errors.New("concurrency is valild")
 	}
 
 	p := &Queue{

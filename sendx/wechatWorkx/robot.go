@@ -1,10 +1,10 @@
 package wechatWorkx
 
 import (
-	"github.com/fengde/gocommon/errorx"
 	"github.com/fengde/gocommon/httpx"
 	"github.com/fengde/gocommon/jsonx"
 	"github.com/fengde/gocommon/structx/setx"
+	"github.com/pkg/errors"
 	"github.com/tidwall/gjson"
 )
 
@@ -27,10 +27,10 @@ func init() {
 func (p *RobotClient) Send(key, data string) error {
 	msgtype := gjson.Get(data, "msgtype").String()
 	if !msgtypes.Has(msgtype) {
-		return errorx.Errorf(`msgtype格式不支持: %s`, msgtype)
+		return errors.Errorf(`msgtype格式不支持: %s`, msgtype)
 	}
 	if !gjson.Get(data, msgtype).Exists() {
-		return errorx.Errorf(`内容不存在: %s`, msgtype)
+		return errors.Errorf(`内容不存在: %s`, msgtype)
 	}
 
 	resp, err := httpx.PostJSON(&httpx.PostJSONInput{
@@ -47,7 +47,7 @@ func (p *RobotClient) Send(key, data string) error {
 	}
 
 	if result.Errcode != 0 {
-		return errorx.Errorf("errmsg: %s", result.Errmsg)
+		return errors.Errorf("errmsg: %s", result.Errmsg)
 	}
 
 	return nil

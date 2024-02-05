@@ -255,7 +255,7 @@ headers即请求头键值对，obj可以传string，[]byte，struct，map等格�
     // 最多重试3次，成功退出，每次重试中间sleep 1秒
     funcx.Retry(3, time.Second, func(loop int) error {
         fmt.Println("hello world")
-        return errorx.New("test retry")
+        return errors.New("test retry")
     })
 ```
 函数重复执行：

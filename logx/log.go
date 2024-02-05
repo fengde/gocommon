@@ -8,7 +8,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/fengde/gocommon/errorx"
+	"github.com/pkg/errors"
 
 	"github.com/evalphobia/logrus_sentry"
 	rotatelogs "github.com/lestrrat-go/file-rotatelogs"
@@ -27,8 +27,9 @@ func init() {
 
 // SetLogFile 设置输出到文件
 // 参数：
-//	logpath 日志文件路径
-//  logSaveDays 日志保留天数
+//
+//		logpath 日志文件路径
+//	 logSaveDays 日志保留天数
 func SetLogFile(logpath string, logSaveDays int) {
 	os.MkdirAll(filepath.Dir(logpath), os.ModePerm)
 	writer, _ := rotatelogs.New(
@@ -64,7 +65,7 @@ func AddSentryHook(dsn string, levels []Level) error {
 	}
 	hook, err := logrus_sentry.NewSentryHook(dsn, tmp)
 	if err != nil {
-		return errorx.WithStack(err)
+		return errors.WithStack(err)
 	}
 
 	AddHook(hook)

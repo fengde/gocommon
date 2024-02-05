@@ -6,6 +6,5 @@ import (
 
 func TestRecover(t *testing.T) {
 	defer Recover()
-
 	panic("aaaaa")
 }

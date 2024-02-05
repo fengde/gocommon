@@ -2,10 +2,10 @@ package purchaselimitx
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"time"
 
-	"github.com/fengde/gocommon/errorx"
 	"github.com/fengde/gocommon/jsonx"
 	"github.com/fengde/gocommon/logx"
 	"github.com/fengde/gocommon/redisx"
@@ -121,7 +121,7 @@ func (p *PurchaseLimit) Check(ctx context.Context, actityId string) error {
 	if p.judgeWindow(pc.Start, now) {
 		// 是否限购，不限购情况下，同时消费次数
 		if pc.Count >= p.limit {
-			return errorx.New("限购")
+			return errors.New("限购")
 		}
 
 		return p.flushCache(ctx, key, PurchaseLimitCache{

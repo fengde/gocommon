@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/fengde/gocommon/errorx"
 	"github.com/go-xorm/xorm"
+	"github.com/pkg/errors"
 )
 
 type Session struct {
@@ -33,7 +33,7 @@ func (p *Session) Insert(table string, data map[string]interface{}) (int64, erro
 
 	result, err := p.Exec(query, args...)
 	if err != nil {
-		return 0, errorx.WithStack(err)
+		return 0, errors.WithStack(err)
 	}
 
 	return result.LastInsertId()
@@ -52,7 +52,7 @@ func (p *Session) QueryOne(query string, args []interface{}, beanPtr interface{}
 // Update 更新，返回更新的记录数
 func (p *Session) Update(table string, set, where map[string]interface{}) (int64, error) {
 	if len(set) == 0 || len(where) == 0 {
-		return 0, errorx.New("set,where不允许为空")
+		return 0, errors.New("set,where不允许为空")
 	}
 	var sets []string
 	var args []interface{}
@@ -74,7 +74,7 @@ func (p *Session) Update(table string, set, where map[string]interface{}) (int64
 
 	result, err := p.Exec(query, args...)
 	if err != nil {
-		return 0, errorx.WithStack(err)
+		return 0, errors.WithStack(err)
 	}
 
 	return result.RowsAffected()
@@ -90,7 +90,7 @@ func (p *Session) UpdateByID(table string, set map[string]interface{}, id int64)
 // Delete 删除，返回删除的记录数
 func (p *Session) Delete(table string, where map[string]interface{}) (int64, error) {
 	if len(where) == 0 {
-		return 0, errorx.New("where不允许为空")
+		return 0, errors.New("where不允许为空")
 	}
 	var wheres []string
 	var args []interface{}
@@ -107,7 +107,7 @@ func (p *Session) Delete(table string, where map[string]interface{}) (int64, err
 
 	result, err := p.Exec(query, args...)
 	if err != nil {
-		return 0, errorx.WithStack(err)
+		return 0, errors.WithStack(err)
 	}
 
 	return result.RowsAffected()
@@ -129,7 +129,7 @@ func (p *Session) Exec(query string, args ...interface{}) (sql.Result, error) {
 // DoTransaction 执行事务
 func (p *Session) DoTransaction(fn func(session *Session) error) error {
 	if err := p.session.Begin(); err != nil {
-		return errorx.WithStack(err)
+		return errors.WithStack(err)
 	}
 	defer p.session.Rollback()
 

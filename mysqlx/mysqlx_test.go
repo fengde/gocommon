@@ -4,7 +4,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/fengde/gocommon/errorx"
+	"github.com/pkg/errors"
 
 	"github.com/fengde/gocommon/logx"
 )
@@ -59,6 +59,6 @@ func TestNewCluster(t *testing.T) {
 		exist, err := session.QueryOne(`select id from user where age=1002`, nil, &id)
 		logx.Info(id, exist, err)
 
-		return errorx.New("i want rollback")
+		return errors.New("i want rollback")
 	})
 }

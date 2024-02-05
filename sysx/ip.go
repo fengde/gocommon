@@ -1,7 +1,7 @@
 package sysx
 
 import (
-	"io/ioutil"
+	"io"
 	"net"
 	"net/http"
 	"strings"
@@ -14,7 +14,7 @@ func GetInternetIP() string {
 		return ""
 	}
 	defer resp.Body.Close()
-	content, _ := ioutil.ReadAll(resp.Body)
+	content, _ := io.ReadAll(resp.Body)
 	return strings.TrimSpace(string(content))
 }
 

@@ -5,8 +5,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/fengde/gocommon/errorx"
 	"github.com/go-resty/resty/v2"
+	"github.com/pkg/errors"
 )
 
 type Response struct {
@@ -44,7 +44,7 @@ func Get(input *GetInput) (*Response, error) {
 
 	resp, err := r.EnableTrace().Get(input.Url)
 	if err != nil {
-		return nil, errorx.WithStack(err)
+		return nil, errors.WithStack(err)
 	}
 
 	return newResponse(resp), nil
@@ -203,11 +203,11 @@ func do(method string, url string, headers map[string]string, body interface{}, 
 	case "delete":
 		resp, err = r.EnableTrace().Delete(url)
 	default:
-		return nil, errorx.Errorf("暂未支持的method：%v", method)
+		return nil, errors.Errorf("暂未支持的method：%v", method)
 	}
 
 	if err != nil {
-		return nil, errorx.WithStack(err)
+		return nil, errors.WithStack(err)
 	}
 
 	return newResponse(resp), nil

@@ -3,10 +3,10 @@ package wechatWorkx
 import (
 	"time"
 
-	"github.com/fengde/gocommon/errorx"
 	"github.com/fengde/gocommon/httpx"
 	"github.com/fengde/gocommon/jsonx"
 	"github.com/fengde/gocommon/logx"
+	"github.com/pkg/errors"
 )
 
 // APPClient 企业微信应用客户端，用于应用给用户，给群发消息
@@ -60,7 +60,7 @@ func (p *APPClient) getAccessToken() (string, error) {
 		token.ExpiredAt = time.Now().Add(time.Second * time.Duration(result.ExpiresIn-100))
 		return result.AccessToken, nil
 	}
-	return "", errorx.New("无法获取到企业微信access_token")
+	return "", errors.New("无法获取到企业微信access_token")
 }
 
 type SendResult struct {
@@ -72,7 +72,7 @@ type SendResult struct {
 // data 参照 https://open.work.weixin.qq.com/api/doc/90000/90135/90236
 func (p *APPClient) Send(data string) error {
 	if len(data) < 1 {
-		return errorx.New("参数错误")
+		return errors.New("参数错误")
 	}
 
 	accessToken, err := p.getAccessToken()
@@ -96,7 +96,7 @@ func (p *APPClient) Send(data string) error {
 	}
 
 	if result.Errcode != 0 {
-		return errorx.Errorf("errmsg: %s", result.Errmsg)
+		return errors.Errorf("errmsg: %s", result.Errmsg)
 	}
 
 	return nil
@@ -105,7 +105,7 @@ func (p *APPClient) Send(data string) error {
 // NewChatGroup 新建群聊组，返回群聊ID
 func (p *APPClient) NewChatGroup(title string, owner string, users []string) (string, error) {
 	if len(title) < 1 || len(owner) < 1 || len(users) < 1 {
-		return "", errorx.New("参数错误")
+		return "", errors.New("参数错误")
 	}
 
 	accessToken, err := p.getAccessToken()
@@ -134,7 +134,7 @@ func (p *APPClient) NewChatGroup(title string, owner string, users []string) (st
 	}
 
 	if result.Errcode != 0 {
-		return "", errorx.Errorf("errmsg: %s", result.Errmsg)
+		return "", errors.Errorf("errmsg: %s", result.Errmsg)
 	}
 
 	return result.ChatID, nil
@@ -144,7 +144,7 @@ func (p *APPClient) NewChatGroup(title string, owner string, users []string) (st
 // data 参照 https://open.work.weixin.qq.com/api/doc/90000/90135/90248
 func (p *APPClient) SendToGroup(data string) error {
 	if len(data) < 1 {
-		return errorx.New("参数错误")
+		return errors.New("参数错误")
 	}
 
 	accessToken, err := p.getAccessToken()
@@ -166,7 +166,7 @@ func (p *APPClient) SendToGroup(data string) error {
 	}
 
 	if result.Errcode != 0 {
-		return errorx.Errorf("errmsg: %s", result.Errmsg)
+		return errors.Errorf("errmsg: %s", result.Errmsg)
 	}
 
 	return nil

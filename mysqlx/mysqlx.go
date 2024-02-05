@@ -12,14 +12,14 @@ import (
 
 	"github.com/fengde/gocommon/safex"
 
-	"github.com/fengde/gocommon/errorx"
+	"github.com/pkg/errors"
 
 	_ "github.com/go-sql-driver/mysql"
 
 	"github.com/go-xorm/xorm"
 )
 
-var NotExistError = errorx.New("记录不存在")
+var NotExistError = errors.New("记录不存在")
 
 type Cluster struct {
 	engineGroup *xorm.EngineGroup
@@ -29,7 +29,7 @@ type Cluster struct {
 func NewCluster(dataSourceNames []string, connMaxLifetime time.Duration, maxOpenConns, maxIdleConns int, closeShowSQL ...bool) (*Cluster, error) {
 	eg, err := xorm.NewEngineGroup("mysql", dataSourceNames, xorm.LeastConnPolicy())
 	if err != nil {
-		return nil, errorx.WithStack(err)
+		return nil, errors.WithStack(err)
 	}
 
 	eg.SetConnMaxLifetime(connMaxLifetime)
@@ -43,7 +43,7 @@ func NewCluster(dataSourceNames []string, connMaxLifetime time.Duration, maxOpen
 	}
 
 	if err := eg.Ping(); err != nil {
-		return nil, errorx.WithStack(err)
+		return nil, errors.WithStack(err)
 	}
 
 	safex.Go(func() {
@@ -80,7 +80,7 @@ func (p *Cluster) Insert(table string, data map[string]interface{}) (int64, erro
 
 	result, err := p.Exec(query, args...)
 	if err != nil {
-		return 0, errorx.WithStack(err)
+		return 0, errors.WithStack(err)
 	}
 
 	return result.LastInsertId()

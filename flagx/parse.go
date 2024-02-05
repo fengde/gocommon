@@ -5,17 +5,19 @@ import (
 	"reflect"
 	"strconv"
 
-	"github.com/fengde/gocommon/errorx"
+	"github.com/pkg/errors"
 )
 
 // 解析并获取命令行入参，传入结构体指针
 // 结构体格式示例：
-// 	var input struct {
-// 		Age   int     `flag:"age" default:"1" help:"input your age"`
-// 		User  string  `flag:"user" default:"fedel" help:"input your user name"`
-// 		Money float64 `flag:"money" help:"input your money"`
-// 		Old   bool    `flag:"old" help:"are you old man"`
-// }
+//
+//		var input struct {
+//			Age   int     `flag:"age" default:"1" help:"input your age"`
+//			User  string  `flag:"user" default:"fedel" help:"input your user name"`
+//			Money float64 `flag:"money" help:"input your money"`
+//			Old   bool    `flag:"old" help:"are you old man"`
+//	}
+//
 // 命令行入参帮助：go run main.go --help
 // 命令行入参格式：go run main.go --age=32 --user=fedel --money=1000000 --old=true
 func Parse(v any) error {
@@ -25,7 +27,7 @@ func Parse(v any) error {
 	realvi := vi.Elem()
 
 	if ti.Kind() != reflect.Ptr || realti.Kind() != reflect.Struct {
-		return errorx.New("入参需要结构体指针")
+		return errors.New("入参需要结构体指针")
 	}
 
 	t := map[string]interface{}{}
@@ -34,7 +36,7 @@ func Parse(v any) error {
 		filedti := realti.Field(i)
 		filedFlag, ok := filedti.Tag.Lookup("flag")
 		if !ok {
-			return errorx.New(filedti.Name + "缺失必要的tag: flag")
+			return errors.New(filedti.Name + "缺失必要的tag: flag")
 		}
 		filedDefault := filedti.Tag.Get("default")
 		filedHelp := filedti.Tag.Get("help")
@@ -49,7 +51,7 @@ func Parse(v any) error {
 			if filedDefault != "" {
 				int64Default, err = strconv.ParseInt(filedDefault, 10, 64)
 				if err != nil {
-					return errorx.New(filedti.Name + "default默认值类型错误")
+					return errors.New(filedti.Name + "default默认值类型错误")
 				}
 			}
 			v = flag.Int64(filedFlag, int64Default, filedHelp)
@@ -59,7 +61,7 @@ func Parse(v any) error {
 			if filedDefault != "" {
 				float64Default, err = strconv.ParseFloat(filedDefault, 64)
 				if err != nil {
-					return errorx.New(filedti.Name + "default默认值类型错误")
+					return errors.New(filedti.Name + "default默认值类型错误")
 				}
 			}
 			v = flag.Float64(filedFlag, float64Default, filedHelp)
@@ -69,13 +71,13 @@ func Parse(v any) error {
 			if filedDefault != "" {
 				boolDefault, err = strconv.ParseBool(filedDefault)
 				if err != nil {
-					return errorx.New(filedti.Name + "default默认值类型错误")
+					return errors.New(filedti.Name + "default默认值类型错误")
 				}
 			}
 
 			v = flag.Bool(filedFlag, boolDefault, filedHelp)
 		default:
-			return errorx.New(filedti.Type.Kind().String() + "，不支持类型不支持")
+			return errors.New(filedti.Type.Kind().String() + "，不支持类型不支持")
 		}
 		t[filedFlag] = v
 	}

@@ -4,7 +4,7 @@ import (
 	"context"
 	"strings"
 
-	"github.com/fengde/gocommon/errorx"
+	"github.com/pkg/errors"
 	appsv1 "k8s.io/api/apps/v1"
 	corev1 "k8s.io/api/core/v1"
 	networkingv1 "k8s.io/api/networking/v1"
@@ -13,7 +13,7 @@ import (
 	"k8s.io/client-go/tools/clientcmd"
 )
 
-var NotExistError = errorx.New("资源不存在")
+var NotExistError = errors.New("资源不存在")
 
 type Client struct {
 	Clientset *kubernetes.Clientset
