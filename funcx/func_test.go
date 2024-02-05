@@ -1,4 +1,4 @@
-package toolx
+package funcx
 
 import (
 	"testing"

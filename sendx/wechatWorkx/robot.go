@@ -16,7 +16,7 @@ func NewRobotClient() *RobotClient {
 	return &rc
 }
 
-var msgtypes = setx.Set{}
+var msgtypes = setx.Set[string]{}
 
 func init() {
 	msgtypes.Store("text", "markdown", "image", "news", "file", "template_card")
