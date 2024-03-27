@@ -65,3 +65,19 @@ func unmarshalUseNumber(decoder *json.Decoder, v interface{}) error {
 func formatError(v string, err error) error {
 	return fmt.Errorf("string: `%s`, error: `%s`", v, err.Error())
 }
+
+/*
+Pretty 将json字符串格式化美化后返回
+比如{"hello": 0} 变成
+
+	{
+		"hello": 0
+	}
+*/
+func Pretty(str string) string {
+	var prettyJSON bytes.Buffer
+	if err := json.Indent(&prettyJSON, []byte(str), "", "  "); err != nil {
+		return ""
+	}
+	return prettyJSON.String()
+}
